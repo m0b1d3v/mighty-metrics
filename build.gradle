@@ -6,6 +6,7 @@ plugins {
 	id 'jacoco' // Test coverage
 
 	id 'com.github.ben-manes.versions' version '0.47.0' // Dependency update checks
+	id 'io.freefair.lombok' version '8.1.0' // Boilerplate reduction
 	id 'org.owasp.dependencycheck' version '8.3.1' // Dependency vulnerability checks
 }
 
@@ -16,6 +17,14 @@ repositories {
 }
 
 dependencies {
+
+	// Logging
+	implementation 'ch.qos.logback:logback-classic:1.4.8'
+
+	// Used for JSON formatting of log messages
+	// As of logback-classic:1.4.8 it includes a native JSON encoder, but it is not configurable for our purposes
+	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
 	// Unit tests
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.4.0'
