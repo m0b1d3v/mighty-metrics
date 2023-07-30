@@ -11,6 +11,7 @@ Tasks are listed here and in the Makefile alphabetically.
 |----------------------|--------------------------------------------------------------------------------------|
 | build                | Create a ZIP file in the `build` directory with everything necessary to run program. |
 | checkDependencies    | Check library dependencies for potential updates.                                    |
+| checkSource          | Check source code against SonarCloud scanner for issues.                             |
 | checkVulnerabilities | Check library dependencies against the OWASP database for vulnerabilities.           |
 | clean                | Wipe out the `build` directory from the file system.                                 |
 | run                  | Start the program locally.                                                           |

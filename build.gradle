@@ -8,6 +8,8 @@ plugins {
 	id 'com.github.ben-manes.versions' version '0.47.0' // Dependency update checks
 	id 'io.freefair.lombok' version '8.1.0' // Boilerplate reduction
 	id 'org.owasp.dependencycheck' version '8.3.1' // Dependency vulnerability checks
+	id 'org.sonarqube' version '4.3.0.3225' // Source code analysis
+
 }
 
 version = 'development'
@@ -77,3 +79,10 @@ jacocoTestReport {
 
 }
 
+sonarqube {
+	properties {
+		property('sonar.host.url', 'https://sonarcloud.io')
+		property('sonar.organization', 'mobiusk')
+		property('sonar.projectKey', 'mobiusk_mighty-metrics')
+	}
+}

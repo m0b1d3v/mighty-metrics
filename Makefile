@@ -7,6 +7,9 @@ build:
 checkDependencies:
 	./gradlew dependencyUpdates
 
+checkSource: clean test
+	./gradlew sonar
+
 checkVulnerabilities:
 	./gradlew dependencyCheckAnalyze
 
