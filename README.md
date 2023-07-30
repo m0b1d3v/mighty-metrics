@@ -10,6 +10,8 @@ Tasks are listed here and in the Makefile alphabetically.
 | Task                 | Description                                                                          |
 |----------------------|--------------------------------------------------------------------------------------|
 | build                | Create a ZIP file in the `build` directory with everything necessary to run program. |
+| checkDependencies    | Check library dependencies for potential updates.                                    |
+| checkVulnerabilities | Check library dependencies against the OWASP database for vulnerabilities.           |
 | clean                | Wipe out the `build` directory from the file system.                                 |
 | run                  | Start the program locally.                                                           |
 | tasks                | Output all possible tasks that Gradle can run for this project.                      |

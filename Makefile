@@ -4,6 +4,12 @@ all:
 build:
 	./gradlew assembleDist
 
+checkDependencies:
+	./gradlew dependencyUpdates
+
+checkVulnerabilities:
+	./gradlew dependencyCheckAnalyze
+
 clean:
 	./gradlew clean
 

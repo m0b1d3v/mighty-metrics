@@ -1,8 +1,12 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
+
 	id 'application' // CLI usage
 	id 'jacoco' // Test coverage
+
+	id 'com.github.ben-manes.versions' version '0.47.0' // Dependency update checks
+	id 'org.owasp.dependencycheck' version '8.3.1' // Dependency vulnerability checks
 }
 
 version = 'development'
@@ -14,6 +18,12 @@ repositories {
 dependencies {
 	// Unit tests
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+dependencyCheck {
+	analyzers {
+		assemblyEnabled = false
+	}
 }
 
 java {
