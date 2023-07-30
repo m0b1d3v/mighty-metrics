@@ -1,0 +1,42 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
+plugins {
+	id 'application' // CLI usage
+}
+
+version = 'development'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Unit tests
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+application {
+	mainClass = 'com.mobiusk.mighty.metrics.Main'
+}
+
+tasks.named('test') {
+
+	// Enable JUnit 5
+	useJUnitPlatform()
+
+	testLogging {
+		events = [
+			TestLogEvent.PASSED,
+			TestLogEvent.SKIPPED,
+			TestLogEvent.FAILED,
+		]
+	}
+
+}
+
