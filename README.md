@@ -1,5 +1,7 @@
 # The Mighty Metrics
 
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/overall?id=mobiusk_mighty-metrics)
+
 A workout tracker for [The Mighty Gym](https://www.themightygym.com/) community.
 Workout records captured from the Score Core can be uploaded here for analysis.
 
