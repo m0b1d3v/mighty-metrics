@@ -16,3 +16,8 @@ tasks:
 test:
 	./gradlew test
 
+testIntegrations:
+	./gradlew test --tests '*IntegrationTest'
+
+testUnits:
+	./gradlew test --tests '*UnitTest'
