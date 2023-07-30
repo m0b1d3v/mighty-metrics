@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
 	id 'application' // CLI usage
+	id 'jacoco' // Test coverage
 }
 
 version = 'development'
@@ -30,12 +31,27 @@ tasks.named('test') {
 	// Enable JUnit 5
 	useJUnitPlatform()
 
+	// Put out coverage reports for tests
+	finalizedBy jacocoTestReport
+
 	testLogging {
 		events = [
 			TestLogEvent.PASSED,
 			TestLogEvent.SKIPPED,
 			TestLogEvent.FAILED,
 		]
+	}
+
+}
+
+jacocoTestReport {
+
+	// Don't run without tests first
+	dependsOn test
+
+	// Sonar needs the XML reports
+	reports {
+		xml.required = true
 	}
 
 }
