@@ -6,9 +6,9 @@ plugins {
 	id 'jacoco' // Test coverage
 
 	id 'com.github.ben-manes.versions' version '0.47.0' // Dependency update checks
-	id 'io.freefair.lombok' version '8.1.0' // Boilerplate reduction
-	id 'org.owasp.dependencycheck' version '8.3.1' // Dependency vulnerability checks
-	id 'org.sonarqube' version '4.3.0.3225' // Source code analysis
+	id 'io.freefair.lombok' version '8.3' // Boilerplate reduction
+	id 'org.owasp.dependencycheck' version '8.4.0' // Dependency vulnerability checks
+	id 'org.sonarqube' version '4.3.1.3277' // Source code analysis
 
 }
 
@@ -21,10 +21,14 @@ repositories {
 dependencies {
 
 	// Logging
-	implementation 'ch.qos.logback:logback-classic:1.4.8'
+	implementation 'ch.qos.logback:logback-classic:1.4.11'
+
+	// Image recognition
+	implementation 'com.google.guava:guava:32.1.2-jre'
+	implementation 'com.google.cloud:google-cloud-vision:3.21.0'
 
 	// Exception monitoring
-	implementation 'io.sentry:sentry:6.27.0'
+	implementation 'io.sentry:sentry:6.28.0'
 
 	// Used for JSON formatting of log messages
 	// As of logback-classic:1.4.8 it includes a native JSON encoder, but it is not configurable for our purposes
@@ -32,7 +36,7 @@ dependencies {
 
 	// Unit tests
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
-	testImplementation 'org.mockito:mockito-junit-jupiter:5.4.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
 
 }
 
