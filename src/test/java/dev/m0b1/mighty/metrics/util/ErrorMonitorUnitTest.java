@@ -1,6 +1,6 @@
-package com.mobiusk.mighty.metrics.util;
+package dev.m0b1.mighty.metrics.util;
 
-import com.mobiusk.mighty.metrics.TestBase;
+import dev.m0b1.mighty.metrics.TestBase;
 import org.junit.jupiter.api.Test;
 
 class ErrorMonitorUnitTest extends TestBase {

@@ -1,4 +1,4 @@
-package com.mobiusk.mighty.metrics.util;
+package dev.m0b1.mighty.metrics.util;
 
 import io.sentry.Sentry;
 import lombok.experimental.UtilityClass;

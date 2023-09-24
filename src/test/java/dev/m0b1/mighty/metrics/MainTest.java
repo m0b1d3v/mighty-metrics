@@ -1,4 +1,4 @@
-package com.mobiusk.mighty.metrics;
+package dev.m0b1.mighty.metrics;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

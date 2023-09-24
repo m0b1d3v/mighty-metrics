@@ -53,7 +53,7 @@ java {
 }
 
 application {
-	mainClass = 'com.mobiusk.mighty.metrics.Main'
+	mainClass = 'dev.m0b1.mighty.metrics.Main'
 }
 
 tasks.named('test') {

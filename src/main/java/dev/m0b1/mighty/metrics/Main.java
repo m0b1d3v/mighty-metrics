@@ -1,6 +1,6 @@
-package com.mobiusk.mighty.metrics;
+package dev.m0b1.mighty.metrics;
 
-import com.mobiusk.mighty.metrics.util.ErrorMonitor;
+import dev.m0b1.mighty.metrics.util.ErrorMonitor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
