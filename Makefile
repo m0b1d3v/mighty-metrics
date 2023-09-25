@@ -1,8 +1,10 @@
+.PHONY: build
+
 all:
 	cat --number Makefile
 
 build:
-	./gradlew assembleDist
+	./gradlew assembleBootDist
 
 buildToolUpdate:
 	./gradlew wrapper --gradle-version latest
@@ -16,11 +18,14 @@ checkSource: clean test
 checkVulnerabilities:
 	./gradlew dependencyCheckAnalyze
 
+classes:
+	./gradlew classes
+
 clean:
 	./gradlew clean
 
 run:
-	./gradlew run
+	./gradlew bootRun
 
 tasks:
 	./gradlew tasks

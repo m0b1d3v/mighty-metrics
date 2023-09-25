@@ -12,9 +12,11 @@ Tasks are listed here and in the Makefile alphabetically.
 | Task                 | Description                                                                          |
 |----------------------|--------------------------------------------------------------------------------------|
 | build                | Create a ZIP file in the `build` directory with everything necessary to run program. |
+| buildToolUpdate      | Update to the latest version of the build tool.                                      |
 | checkDependencies    | Check library dependencies for potential updates.                                    |
 | checkSource          | Check source code against SonarCloud scanner for issues.                             |
 | checkVulnerabilities | Check library dependencies against the OWASP database for vulnerabilities.           |
+| classes              | Compile the main application without running tests to trigger development reload.    |
 | clean                | Wipe out the `build` directory from the file system.                                 |
 | run                  | Start the program locally.                                                           |
 | tasks                | Output all possible tasks that Gradle can run for this project.                      |

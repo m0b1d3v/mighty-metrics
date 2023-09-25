@@ -1,16 +1,15 @@
 package dev.m0b1.mighty.metrics;
 
-import dev.m0b1.mighty.metrics.util.ErrorMonitor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
+@SpringBootApplication
+@RestController
 public class Main {
 
   public static void main(String[] args) {
-
-    ErrorMonitor.start();
-
-    log.info("Hello, world");
+    SpringApplication.run(Main.class, args);
   }
 
 }

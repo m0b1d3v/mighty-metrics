@@ -1,0 +1,6 @@
+sentry:
+  dsn: # Intentionally left empty
+
+spring:
+  main:
+    banner-mode: off
