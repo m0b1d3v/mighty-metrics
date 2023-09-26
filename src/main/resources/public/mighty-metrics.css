@@ -1,0 +1,153 @@
+:root {
+	--color-background: #242424;
+	--color-background-darker: #121212;
+	--color-background-lighter: #353535;
+	--color-primary: #fda815;
+	--color-secondary: #00d2ff;
+	--color-tertiary: #fca5ff;
+	--content-padding: 1.5rem;
+	--min-content-width: 300px;
+	--max-content-width: 640px;
+}
+
+/*
+Background container
+*/
+
+body, html {
+	background-color: var(--color-background);
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	min-width: var(--min-content-width);
+}
+
+body {
+	border-color: var(--color-primary);
+	border-style: solid;
+	border-width: 5px 0 4px;
+
+	border-image-slice: 1;
+	border-image-source: linear-gradient(
+		to right,
+		var(--color-secondary) 5%,
+		var(--color-primary) 5%,
+		var(--color-primary) 95%,
+		var(--color-tertiary) 95%
+	);
+
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	line-height: 1.5;
+}
+
+/*
+Typography sizes
+*/
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 400;
+	margin: 0 0 0.5rem;
+}
+
+h1, h1 a { font-size: 2.0rem; }
+h2, h2 a { font-size: 1.8rem; }
+h3, h3 a { font-size: 1.6rem; }
+h4, h4 a { font-size: 1.4rem; }
+h5, h5 a { font-size: 1.2rem; }
+h6, a, p, li { font-size: 1rem; }
+
+/*
+Content container
+*/
+
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	padding: var(--content-padding);
+}
+
+header, main, footer {
+	margin: 0 auto;
+	max-width: var(--max-content-width);
+	width: 100%;
+}
+
+footer {
+	margin-top: auto;
+}
+
+/*
+Content separation
+*/
+
+hr {
+	background-color: var(--color-background-lighter);
+	border: none;
+	height: 2px;
+	margin: var(--content-padding) 0;
+}
+
+/*
+Images
+*/
+
+img {
+	height: auto;
+	max-width: 100%;
+}
+
+header img {
+	max-width: 50%;
+}
+
+/*
+Lists
+*/
+
+ul li {
+	list-style-type: circle;
+}
+
+/*
+Links
+*/
+
+a {
+	text-decoration: underline;
+	text-decoration-color: var(--color-primary);
+	text-decoration-thickness: 3px;
+}
+
+a:hover {
+	filter: brightness(1.25);
+}
+
+/*
+De-emphasizing content
+*/
+
+a, body {
+	color: #dddddd;
+}
+
+small {
+	color: #aaaaaa;
+	display: block;
+}
+
+/*
+Positioning
+*/
+
+.text-align-center {
+	text-align: center;
+}
+
+.margin-right {
+	margin-right: 5px;
+}
