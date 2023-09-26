@@ -23,3 +23,13 @@ Tasks are listed here and in the Makefile alphabetically.
 | test                 | Run all test files.                                                                  |
 | testIntegrations     | Run test files that end with "IntegrationTest".                                      |
 | testUnits            | Run test files that end with "UnitTest".                                             |
+
+## Favicon
+
+The favicon was generated from [favicon.io](https://favicon.io/emoji-favicons/flexed-biceps).
+
+The following information was provided from the generator:
+- Graphics Title: 1f4aa.svg
+- Graphics Author: Copyright 2020 Twitter, Inc and other contributors (https://github.com/twitter/twemoji)
+- Graphics Source: https://github.com/twitter/twemoji/blob/master/assets/svg/1f4aa.svg
+- Graphics License: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
