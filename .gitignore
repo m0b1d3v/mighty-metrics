@@ -4,3 +4,6 @@
 # Build system
 .gradle
 build
+
+# Run time
+mighty-metrics.sqlite

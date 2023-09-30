@@ -41,13 +41,21 @@ dependencies {
 	}
 
 	// Framework
+
 	implementation('org.springframework.boot:spring-boot-starter')
+	implementation('org.springframework.boot:spring-boot-starter-jdbc')
 	implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
 	implementation('org.springframework.boot:spring-boot-starter-web')
+
+	implementation('org.springframework.session:spring-session-jdbc')
+
 	// Templates
 	implementation('org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE')
 
+	// Database
+	implementation('org.hibernate.orm:hibernate-community-dialects:6.3.1.Final')
+	implementation('org.xerial:sqlite-jdbc:3.43.0.0')
 
 	// Testing
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
