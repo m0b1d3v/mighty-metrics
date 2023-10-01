@@ -5,12 +5,12 @@ plugins {
 	id 'application' // CLI usage
 	id 'jacoco' // Test coverage
 
-	id 'com.github.ben-manes.versions' version '0.47.0' // Dependency update checks
+	id 'com.github.ben-manes.versions' version '0.48.0' // Dependency update checks
 	id 'io.freefair.lombok' version '8.3' // Boilerplate reduction
-	id 'io.sentry.jvm.gradle' version '3.12.0' // Exception monitoring
+	id 'io.sentry.jvm.gradle' version '3.13.0' // Exception monitoring
 	id 'io.spring.dependency-management' version '1.1.3' // Transitive/exclusion dependency management
 	id 'org.owasp.dependencycheck' version '8.4.0' // Dependency vulnerability checks
-	id 'org.sonarqube' version '4.3.1.3277' // Source code analysis
+	id 'org.sonarqube' version '4.4.0.3356' // Source code analysis
 	id 'org.springframework.boot' version '3.1.4' // Framework
 
 }
@@ -36,7 +36,7 @@ dependencies {
 
 	// Image recognition
 	implementation('com.google.guava:guava:32.1.2-jre')
-	implementation('com.google.cloud:google-cloud-vision:3.21.0') {
+	implementation('com.google.cloud:google-cloud-vision:3.22.0') {
 		exclude group: 'commons-logging', module: 'commons-logging'
 	}
 
