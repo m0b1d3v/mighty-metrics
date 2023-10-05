@@ -157,3 +157,11 @@ Positioning
 .margin-right {
 	margin-right: var(--content-padding);
 }
+
+/*
+Forms
+*/
+
+:invalid, .input-error {
+	border-color: red;
+}

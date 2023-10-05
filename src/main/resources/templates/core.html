@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
+
+	<head>
+		<title>Mighty Metrics - Core</title>
+	</head>
+
+	<body>
+		<main>
+
+			<h3>
+				Return to view progress on your <a href="/">&lArr; profile</a>
+			</h3>
+
+			<h4>Scorecard Core</h4>
+
+			<form method="post" th:action="@{/core}" th:object="${scorecard}">
+
+				<ul th:if="${#fields.hasAnyErrors()}">
+					<li th:each="error : ${#fields.allErrors()}" th:text="${error}"/>
+				</ul>
+
+				<p>This needs to have the "accept" attribute set.</p>
+
+				<label for="file">File</label>
+				<br/>
+				<input id="file" type="file">
+
+				<br/>
+
+				<label for="coach">Coach</label>
+				<br/>
+				<select
+					id="coach"
+					th:field="*{coach}"
+					th:errorclass="input-error"
+				>
+					<option value=""></option>
+					<option th:each="option : ${coaches}" th:value="${option}" th:text="${option.value}">
+				</select>
+
+				<br/>
+
+				<label for="localDateTime">Time</label>
+				<br/>
+				<input
+					id="localDateTime"
+					type="datetime-local"
+					th:field="*{localDateTime}"
+					th:errorclass="input-error"
+				>
+
+				<br/>
+
+				<label for="groupAverage">Group Average</label>
+				<br/>
+				<select
+					id="groupAverage"
+					th:field="*{groupAverage}"
+					th:errorclass="input-error"
+				>
+					<option value=""></option>
+					<option th:each="option : ${scores}" th:value="${option}" th:text="${option.value}">
+				</select>
+
+				<br/>
+
+				<label for="personalAverage">Personal Average</label>
+				<br/>
+				<select
+					id="personalAverage"
+					th:field="*{personalAverage}"
+					th:errorclass="input-error"
+				>
+					<option value=""></option>
+					<option th:each="option : ${scores}" th:value="${option}" th:text="${option.value}">
+				</select>
+
+				<br/>
+
+				<label for="workoutIntensity">Workout Intensity</label>
+				<br/>
+				<input
+					id="workoutIntensity"
+					type="number"
+					min="0"
+					max="100"
+					th:field="*{workoutIntensity}"
+					th:errorclass="input-error"
+				>
+
+				<br/>
+
+				<label for="mighteriumCollected">Mighterium Collected</label>
+				<br/>
+				<input
+					id="mighteriumCollected"
+					type="number"
+					min="0"
+					max="100000"
+					th:field="*{mighteriumCollected}"
+					th:errorclass="input-error"
+				>
+
+				<br/>
+
+				<label for="exercise">Exercise</label>
+				<label for="exerciseScore">Score</label>
+
+				<br/>
+
+				<div th:each="exercise, stat : *{exercises}">
+
+					<button
+						type="submit"
+						name="remove"
+						title="Remove exercise"
+						th:value="${stat.index}"
+						th:text="'-'"
+					/>
+
+					<input
+						id="exercise"
+						name="exercise[]"
+						type="text"
+						list="exercises"
+						th:field="*{exercises[__${stat.index}__].exercise}"
+						th:errorclass="input-error"
+					>
+
+					<select
+						id="exerciseScore"
+						th:field="*{exercises[__${stat.index}__].score}"
+						th:errorclass="input-error"
+					>
+						<option value=""></option>
+						<option th:each="option : ${scores}" th:value="${option}" th:text="${option.value}">
+					</select>
+
+				</div>
+
+				<button
+					type="submit"
+					name="add"
+					title="Add exercise"
+					th:text="'+'"
+				/>
+
+				<datalist id="exercises">
+					<option>Arm Circles</option>
+					<option>DDR Lunges</option>
+					<option>Running</option>
+				</datalist>
+
+				<br/>
+
+				<input type="submit" value="Save scorecard"/>
+
+			</form>
+
+		</main>
+	</body>
+
+</html>
