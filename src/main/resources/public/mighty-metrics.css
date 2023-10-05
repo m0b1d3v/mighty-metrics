@@ -8,6 +8,7 @@
 	--content-padding: 1.5rem;
 	--min-content-width: 300px;
 	--max-content-width: 640px;
+	--nav-avatar-image-size: 64px;
 }
 
 /*
@@ -103,6 +104,11 @@ img {
 
 header img {
 	max-width: 50%;
+}
+
+.avatar {
+	border-radius: calc(var(--nav-avatar-image-size) / 2);
+	width: var(--nav-avatar-image-size);
 }
 
 /*
