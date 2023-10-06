@@ -1,7 +1,6 @@
 package dev.m0b1.mighty.metrics.controllers;
 
-import dev.m0b1.mighty.metrics.enums.EnumCoach;
-import dev.m0b1.mighty.metrics.enums.EnumScore;
+import dev.m0b1.mighty.metrics.dao.DaoReader;
 import dev.m0b1.mighty.metrics.models.Exercise;
 import dev.m0b1.mighty.metrics.models.ScoreCard;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class CoreController {
+
+  private final DaoReader daoReader;
 
   @GetMapping("/core")
   public String getCore(Model model) {
@@ -44,9 +45,9 @@ public class CoreController {
   }
 
   private void addModelAttributes(ScoreCard scoreCard, Model model) {
-    model.addAttribute("coaches", EnumCoach.values());
+    model.addAttribute("coaches", daoReader.coaches());
     model.addAttribute("scorecard", scoreCard);
-    model.addAttribute("scores", EnumScore.values());
+    model.addAttribute("scores", daoReader.scores());
   }
 
   private void removeExerciseByIndexIfGiven(ScoreCard scoreCard, HttpServletRequest httpServletRequest) {

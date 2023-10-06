@@ -32,11 +32,11 @@
 				<br/>
 				<select
 					id="coach"
-					th:field="*{coach}"
+					th:field="*{idCoach}"
 					th:errorclass="input-error"
 				>
 					<option value=""></option>
-					<option th:each="option : ${coaches}" th:value="${option}" th:text="${option.value}">
+					<option th:each="option : ${coaches}" th:value="${option.key}" th:text="${option.value}">
 				</select>
 
 				<br/>
@@ -56,11 +56,11 @@
 				<br/>
 				<select
 					id="groupAverage"
-					th:field="*{groupAverage}"
+					th:field="*{idGroupAverageScore}"
 					th:errorclass="input-error"
 				>
 					<option value=""></option>
-					<option th:each="option : ${scores}" th:value="${option}" th:text="${option.value}">
+					<option th:each="option : ${scores}" th:value="${option.key}" th:text="${option.value}">
 				</select>
 
 				<br/>
@@ -69,11 +69,11 @@
 				<br/>
 				<select
 					id="personalAverage"
-					th:field="*{personalAverage}"
+					th:field="*{idPersonalAverageScore}"
 					th:errorclass="input-error"
 				>
 					<option value=""></option>
-					<option th:each="option : ${scores}" th:value="${option}" th:text="${option.value}">
+					<option th:each="option : ${scores}" th:value="${option.key}" th:text="${option.value}">
 				</select>
 
 				<br/>
