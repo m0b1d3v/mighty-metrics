@@ -35,10 +35,8 @@ public class CoreController {
   ) {
 
     removeExerciseByIndexIfGiven(scoreCard, httpServletRequest);
+    addExerciseIfDesired(scoreCard, httpServletRequest);
 
-    if (httpServletRequest.getParameterMap().containsKey("add")) {
-      scoreCard.getExercises().add(new Exercise());
-    }
 
     addModelAttributes(scoreCard, model);
     return "core";
@@ -48,6 +46,12 @@ public class CoreController {
     model.addAttribute("coaches", daoReader.coaches());
     model.addAttribute("scorecard", scoreCard);
     model.addAttribute("scores", daoReader.scores());
+  }
+
+  private void addExerciseIfDesired(ScoreCard scoreCard, HttpServletRequest httpServletRequest) {
+    if (httpServletRequest.getParameterMap().containsKey("add")) {
+      scoreCard.getExercises().add(new Exercise());
+    }
   }
 
   private void removeExerciseByIndexIfGiven(ScoreCard scoreCard, HttpServletRequest httpServletRequest) {
