@@ -6,4 +6,4 @@
 build
 
 # Run time
-mighty-metrics.sqlite
+mighty-metrics.sqlite*
