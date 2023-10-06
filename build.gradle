@@ -55,7 +55,6 @@ dependencies {
 	implementation('org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE')
 
 	// Database
-	implementation('org.hibernate.orm:hibernate-community-dialects:6.3.1.Final')
 	implementation('org.xerial:sqlite-jdbc:3.43.0.0')
 
 	// Testing

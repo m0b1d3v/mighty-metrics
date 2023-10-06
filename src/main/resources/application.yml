@@ -5,8 +5,6 @@ spring:
   datasource:
     url: "jdbc:sqlite:mighty-metrics.sqlite"
     driver-class-name: org.sqlite.JDBC
-  jpa:
-    database-platform: org.hibernate.community.dialect.SQLiteDialect
   main:
     banner-mode: off
   security:
