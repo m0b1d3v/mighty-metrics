@@ -102,8 +102,12 @@ public class Migrations implements SmartInitializingSingleton {
     migrations.add("002-populate-coach-table");
     migrations.add("003-create-score-table");
     migrations.add("004-populate-score-table");
-    migrations.add("005-create-scorecard-table");
-    migrations.add("006-create-exercise-table");
+    migrations.add("005-create-member-table");
+    migrations.add("006-index-member-table");
+    migrations.add("007-create-scorecard-table");
+    migrations.add("008-index-scorecard-table");
+    migrations.add("009-create-exercise-table");
+    migrations.add("010-index-exercise-table");
     return migrations;
   }
 
