@@ -21,7 +21,7 @@ public class ScoreCard {
 
   private Long idPersonalAverageScore;
 
-  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime localDateTime;
 
   @Min(value = 0, message = "Workout intensity must be at least ${value}")
