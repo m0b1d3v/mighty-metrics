@@ -1,5 +1,6 @@
 package dev.m0b1.mighty.metrics.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -9,17 +10,24 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class ScoreCard {
 
+  @JsonIgnore
   private Long id;
+
+  @JsonIgnore
+  private Long idMember;
 
   private Long idCoach;
 
-  private Long idGroupAverageScore;
+  private Long idScoreGroup;
 
-  private Long idPersonalAverageScore;
+  private Long idScorePersonal;
+
+  private UUID uuid;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime localDateTime;

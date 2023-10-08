@@ -12,19 +12,13 @@
 				Return to view progress on your <a href="/">&lArr; profile</a>
 			</h3>
 
-			<h4>Scorecard Core</h4>
+			<form th:method="post" th:action="@{/core}" th:object="${scorecard}">
 
-			<form method="post" th:action="@{/core}" th:object="${scorecard}">
+				<input type="hidden" th:field="*{uuid}"/>
 
 				<ul th:if="${#fields.hasAnyErrors()}">
 					<li th:each="error : ${#fields.allErrors()}" th:text="${error}"/>
 				</ul>
-
-				<p>This needs to have the "accept" attribute set.</p>
-
-				<label for="file">File</label>
-				<br/>
-				<input id="file" type="file">
 
 				<br/>
 
@@ -56,7 +50,7 @@
 				<br/>
 				<select
 					id="groupAverage"
-					th:field="*{idGroupAverageScore}"
+					th:field="*{idScoreGroup}"
 					th:errorclass="input-error"
 				>
 					<option value=""></option>
@@ -69,7 +63,7 @@
 				<br/>
 				<select
 					id="personalAverage"
-					th:field="*{idPersonalAverageScore}"
+					th:field="*{idScorePersonal}"
 					th:errorclass="input-error"
 				>
 					<option value=""></option>

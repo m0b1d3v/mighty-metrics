@@ -1,11 +1,13 @@
 package dev.m0b1.mighty.metrics.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class Exercise {
 
+  @JsonIgnore
   private Long id;
 
   private Long idScore;
