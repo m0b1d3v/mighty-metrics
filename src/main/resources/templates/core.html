@@ -30,7 +30,7 @@
 					th:errorclass="input-error"
 				>
 					<option value=""></option>
-					<option th:each="option : ${coaches}" th:value="${option.key}" th:text="${option.value}">
+					<option th:each="option : ${coaches}" th:value="${option.id}" th:text="${option.name}">
 				</select>
 
 				<br/>
@@ -54,7 +54,7 @@
 					th:errorclass="input-error"
 				>
 					<option value=""></option>
-					<option th:each="option : ${scores}" th:value="${option.key}" th:text="${option.value}">
+					<option th:each="option : ${scores}" th:value="${option.id}" th:text="${option.value}">
 				</select>
 
 				<br/>
@@ -67,7 +67,7 @@
 					th:errorclass="input-error"
 				>
 					<option value=""></option>
-					<option th:each="option : ${scores}" th:value="${option.key}" th:text="${option.value}">
+					<option th:each="option : ${scores}" th:value="${option.id}" th:text="${option.value}">
 				</select>
 
 				<br/>
@@ -128,7 +128,7 @@
 						th:errorclass="input-error"
 					>
 						<option value=""></option>
-						<option th:each="option : ${scores}" th:value="${option}" th:text="${option.value}">
+						<option th:each="option : ${scores}" th:value="${option.id}" th:text="${option.value}">
 					</select>
 
 				</div>

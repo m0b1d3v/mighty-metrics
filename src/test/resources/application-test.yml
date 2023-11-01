@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: "jdbc:sqlite::memory:"
+  security:
+    oauth2:
+      client:
+        registration:
+          discord:
+            client-id: testing
+            client-secret: testing

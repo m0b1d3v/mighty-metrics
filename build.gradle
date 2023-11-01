@@ -59,6 +59,9 @@ dependencies {
 
 	// Testing
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	testImplementation('org.springframework.security:spring-security-test')
+	testImplementation('com.microsoft.playwright:playwright:1.39.0')
+	testImplementation('com.deque.html.axe-core:playwright:4.8.0')
 
 }
 
