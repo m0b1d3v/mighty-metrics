@@ -4,7 +4,6 @@ import dev.m0b1.mighty.metrics.UnitTestBase;
 import dev.m0b1.mighty.metrics.auth.AuthAttributes;
 import dev.m0b1.mighty.metrics.db.coach.DbCoach;
 import dev.m0b1.mighty.metrics.db.coach.DbCoachRepository;
-import dev.m0b1.mighty.metrics.db.exercise.DbExercise;
 import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
 import dev.m0b1.mighty.metrics.db.score.DbScore;
 import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
@@ -66,7 +65,6 @@ class RouteCoreUnitTest extends UnitTestBase {
   @Mock
   private BindingResult bindingResult;
 
-  private final List<DbExercise> originalExerciseList = Collections.nCopies(10, new DbExercise());
   private final List<DbCoach> coaches = new ArrayList<>();
   private final List<DbScore> scores = new ArrayList<>();
   private final DbScoreCard dbScoreCard = new DbScoreCard();

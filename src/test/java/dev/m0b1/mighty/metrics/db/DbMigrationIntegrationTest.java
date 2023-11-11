@@ -31,7 +31,7 @@ class DbMigrationIntegrationTest extends IntegrationTestBase {
   @Test
   void version() {
     var result = jdbcTemplate.queryForObject("PRAGMA user_version;", Integer.class);
-    assertEquals(10, result);
+    assertEquals(8, result);
   }
 
   @ParameterizedTest
@@ -45,7 +45,7 @@ class DbMigrationIntegrationTest extends IntegrationTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"member", "scorecard", "exercise"})
+  @ValueSource(strings = {"member", "scorecard"})
   void index(String table) {
 
     var indexName = String.format("index_%s_uuid", table);
@@ -102,18 +102,6 @@ class DbMigrationIntegrationTest extends IntegrationTestBase {
       )"""
     );
 
-    var exercise = Arguments.of("exercise", """
-      CREATE TABLE exercise (
-      	id INTEGER PRIMARY KEY AUTOINCREMENT,
-      	id_scorecard INTEGER,
-      	id_score INTEGER,
-      	uuid TEXT,
-      	value TEXT,
-      	FOREIGN KEY (id_scorecard) REFERENCES scorecard (id) ON DELETE CASCADE,
-      	FOREIGN KEY (id_score) REFERENCES score (id)
-      )"""
-    );
-
     var member = Arguments.of("member", """
       CREATE TABLE member (
       	id INTEGER PRIMARY KEY,
@@ -147,7 +135,7 @@ class DbMigrationIntegrationTest extends IntegrationTestBase {
       )"""
     );
 
-    return Stream.of(coach, exercise, member, score, scorecard);
+    return Stream.of(coach, member, score, scorecard);
   }
 
 }

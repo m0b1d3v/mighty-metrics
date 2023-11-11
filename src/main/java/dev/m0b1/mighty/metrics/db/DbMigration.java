@@ -105,8 +105,6 @@ public class DbMigration implements SmartInitializingSingleton {
     migrations.add("006-index-member-table");
     migrations.add("007-create-scorecard-table");
     migrations.add("008-index-scorecard-table");
-    migrations.add("009-create-exercise-table");
-    migrations.add("010-index-exercise-table");
     return migrations;
   }
 
