@@ -35,6 +35,7 @@ class DbScoreCardMapperUnitTest extends UnitTestBase {
     when(resultSet.getObject(any(String.class))).thenReturn(1, 2, 3, 4, 5);
     when(resultSet.getObject(any(String.class), eq(Integer.class))).thenReturn(1, 2, 3, 4, 5);
     when(resultSet.getString(DbScoreCard.COLUMN_UUID)).thenReturn(uuid.toString());
+    when(resultSet.getString(DbScoreCard.COLUMN_EXERCISES)).thenReturn("[{\"idScore\":2,\"exercise\":\"Push ups\"}]");
   }
 
   @Test
@@ -64,6 +65,7 @@ class DbScoreCardMapperUnitTest extends UnitTestBase {
   }
 
   private void assertCommonFields(DbScoreCard result) {
+
     assertNotNull(result);
     assertEquals(1, result.getIdCoach());
     assertEquals(2, result.getIdScoreGroup());
@@ -71,6 +73,10 @@ class DbScoreCardMapperUnitTest extends UnitTestBase {
     assertEquals(uuid, result.getUuid());
     assertEquals(4, result.getWorkoutIntensity());
     assertEquals(5, result.getMighteriumCollected());
+
+    assertEquals(1, result.getExercises().size());
+    assertEquals(2, result.getExercises().get(0).getIdScore());
+    assertEquals("Push ups", result.getExercises().get(0).getExercise());
   }
 
 }

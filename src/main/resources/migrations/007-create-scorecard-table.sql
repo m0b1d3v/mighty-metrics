@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS scorecard (
 	local_date_time TEXT,
 	workout_intensity INTEGER,
 	mighterium_collected INTEGER,
+	exercises TEXT,
 	FOREIGN KEY (id_member) REFERENCES member (id),
 	FOREIGN KEY (id_coach) REFERENCES coach (id),
 	FOREIGN KEY (id_score_group) REFERENCES score (id),

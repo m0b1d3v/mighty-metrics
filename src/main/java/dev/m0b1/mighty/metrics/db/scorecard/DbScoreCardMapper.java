@@ -2,12 +2,14 @@ package dev.m0b1.mighty.metrics.db.scorecard;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.m0b1.mighty.metrics.db.DbUtil;
+import dev.m0b1.mighty.metrics.util.JsonUtil;
 import jakarta.annotation.Nonnull;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class DbScoreCardMapper implements RowMapper<DbScoreCard> {
@@ -26,6 +28,13 @@ public class DbScoreCardMapper implements RowMapper<DbScoreCard> {
     var localDateTime = resultSet.getString(DbScoreCard.COLUMN_LOCAL_DATE_TIME);
     if (localDateTime != null) {
       scoreCard.setLocalDateTime(LocalDateTime.parse(localDateTime));
+    }
+
+    var exercisesJson = resultSet.getString(DbScoreCard.COLUMN_EXERCISES);
+    var typeReference = new TypeReference<List<DbScoreCardExercise>>(){};
+    var exercises = JsonUtil.read(exercisesJson, typeReference);
+    if (exercises != null) {
+      scoreCard.getExercises().addAll(exercises);
     }
 
     return scoreCard;

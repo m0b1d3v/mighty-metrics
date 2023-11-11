@@ -1,7 +1,7 @@
 package dev.m0b1.mighty.metrics.db.scorecard;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dev.m0b1.mighty.metrics.db.exercise.DbExercise;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -9,7 +9,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +27,7 @@ public class DbScoreCard {
   public static final String COLUMN_LOCAL_DATE_TIME = "local_date_time";
   public static final String COLUMN_WORKOUT_INTENSITY = "workout_intensity";
   public static final String COLUMN_MIGHTERIUM_COLLECTED = "mighterium_collected";
+  public static final String COLUMN_EXERCISES = "exercises";
 
   @JsonIgnore
   private Long id;
@@ -57,7 +58,8 @@ public class DbScoreCard {
   @Max(value = 100_000, message = "Mighterium collected cannot be higher than the core can count")
   private Integer mighteriumCollected;
 
-  private List<DbExercise> exercises = new ArrayList<>();
   @Size(max = 50, message = "Number of exercises cannot be higher than {value}")
+  @Valid
+  private List<DbScoreCardExercise> exercises = new LinkedList<>();
 
 }

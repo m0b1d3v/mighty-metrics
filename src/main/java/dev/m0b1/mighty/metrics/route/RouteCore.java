@@ -2,6 +2,7 @@ package dev.m0b1.mighty.metrics.route;
 
 import dev.m0b1.mighty.metrics.auth.AuthAttributes;
 import dev.m0b1.mighty.metrics.db.coach.DbCoachRepository;
+import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardExercise;
 import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
 import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
@@ -103,6 +104,7 @@ public class RouteCore {
 
   private void addExerciseIfDesired(DbScoreCard dbScoreCard, HttpServletRequest httpServletRequest) {
     if (httpServletRequest.getParameterMap().containsKey("add")) {
+      dbScoreCard.getExercises().add(new DbScoreCardExercise());
     }
   }
 

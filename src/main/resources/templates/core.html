@@ -124,6 +124,7 @@
 
 					<select
 						id="exerciseScore"
+						th:field="*{exercises[__${stat.index}__].idScore}"
 						th:errorclass="input-error"
 					>
 						<option value=""></option>

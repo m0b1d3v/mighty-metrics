@@ -28,6 +28,11 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
 
   @BeforeEach
   public void beforeEach() {
+
+    var exercise = new DbScoreCardExercise();
+    exercise.setIdScore(1);
+    exercise.setExercise("Push ups");
+
     dbScoreCard.setIdMember(1L);
     dbScoreCard.setIdCoach(2);
     dbScoreCard.setIdScoreGroup(3);
@@ -36,6 +41,7 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
     dbScoreCard.setLocalDateTime(localDateTime);
     dbScoreCard.setWorkoutIntensity(5);
     dbScoreCard.setMighteriumCollected(6);
+    dbScoreCard.getExercises().add(exercise);
   }
 
   @Test
@@ -50,7 +56,8 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
         "uuid, " +
         "local_date_time, " +
         "workout_intensity, " +
-        "mighterium_collected " +
+        "mighterium_collected, " +
+        "exercises " +
       "FROM scorecard " +
       "WHERE uuid = ?";
 
@@ -64,7 +71,18 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
 
     var expectedSql = getUpsertSql();
 
-    verify(jdbcTemplate).update(expectedSql, 1L, 2, 3, 4, uuid, localDateTime, 5, 6);
+    verify(jdbcTemplate).update(
+      expectedSql,
+      1L,
+      2,
+      3,
+      4,
+      uuid,
+      localDateTime,
+      5,
+      6,
+      "[{\"idScore\":1,\"exercise\":\"Push ups\"}]"
+    );
   }
 
   @Test
@@ -85,7 +103,8 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
       any(UUID.class),
       eq(localDateTime),
       eq(5),
-      eq(6)
+      eq(6),
+      eq("[{\"idScore\":1,\"exercise\":\"Push ups\"}]")
     );
   }
 
@@ -98,9 +117,10 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
       "uuid, " +
       "local_date_time, " +
       "workout_intensity, " +
-      "mighterium_collected" +
+      "mighterium_collected, " +
+      "exercises" +
       ") " +
-      "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET " +
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET " +
       "id_member = excluded.id_member, " +
       "id_coach = excluded.id_coach, " +
       "id_score_group = excluded.id_score_group, " +
@@ -108,7 +128,8 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
       "uuid = excluded.uuid, " +
       "local_date_time = excluded.local_date_time, " +
       "workout_intensity = excluded.workout_intensity, " +
-      "mighterium_collected = excluded.mighterium_collected";
+      "mighterium_collected = excluded.mighterium_collected, " +
+      "exercises = excluded.exercises";
   }
 
 }

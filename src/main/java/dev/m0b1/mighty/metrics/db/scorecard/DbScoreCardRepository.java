@@ -1,7 +1,9 @@
 package dev.m0b1.mighty.metrics.db.scorecard;
 
 import dev.m0b1.mighty.metrics.db.DbUtil;
+import dev.m0b1.mighty.metrics.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +13,7 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class DbScoreCardRepository {
 
   private static final DbScoreCardMapper MAPPER = new DbScoreCardMapper();
@@ -26,7 +29,8 @@ public class DbScoreCardRepository {
       DbScoreCard.COLUMN_UUID,
       DbScoreCard.COLUMN_LOCAL_DATE_TIME,
       DbScoreCard.COLUMN_WORKOUT_INTENSITY,
-      DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED
+      DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED,
+      DbScoreCard.COLUMN_EXERCISES
     ));
 
     var sql = String.format("SELECT %s FROM %s WHERE uuid = ?", columns, DbScoreCard.TABLE);
@@ -40,6 +44,8 @@ public class DbScoreCardRepository {
       dbScoreCard.setUuid(UUID.randomUUID());
     }
 
+    var exercisesJson = JsonUtil.write(dbScoreCard.getExercises(), "[]");
+
     var inputMap = new LinkedHashMap<String, Object>();
     inputMap.put(DbScoreCard.COLUMN_ID_MEMBER,  dbScoreCard.getIdMember());
     inputMap.put(DbScoreCard.COLUMN_ID_COACH, dbScoreCard.getIdCoach());
@@ -49,6 +55,7 @@ public class DbScoreCardRepository {
     inputMap.put(DbScoreCard.COLUMN_LOCAL_DATE_TIME, dbScoreCard.getLocalDateTime());
     inputMap.put(DbScoreCard.COLUMN_WORKOUT_INTENSITY, dbScoreCard.getWorkoutIntensity());
     inputMap.put(DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED, dbScoreCard.getMighteriumCollected());
+    inputMap.put(DbScoreCard.COLUMN_EXERCISES, exercisesJson);
 
     DbUtil.upsert(
       jdbcTemplate,
