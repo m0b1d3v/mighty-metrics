@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS scorecard (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	deleted BOOLEAN,
 	id_member INTEGER,
 	id_coach INTEGER,
 	id_score_group INTEGER,

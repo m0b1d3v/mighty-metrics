@@ -59,7 +59,8 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
         "mighterium_collected, " +
         "exercises " +
       "FROM scorecard " +
-      "WHERE uuid = ?";
+      "WHERE uuid = ? " +
+      "AND deleted IS NOT TRUE";
 
     verify(jdbcTemplate).queryForObject(eq(expected), any(DbScoreCardMapper.class), eq(uuid));
   }

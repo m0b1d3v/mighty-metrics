@@ -152,6 +152,18 @@
 
 			</form>
 
+			<br/>
+
+			<form
+				th:if="${scorecard.uuid != null}"
+				th:method="post"
+				th:action="@{/core/delete}"
+				th:object="${scorecard}"
+			>
+				<input type="hidden" th:field="*{uuid}"/>
+				<input type="submit" value="Delete scorecard"/>
+			</form>
+
 		</main>
 	</body>
 

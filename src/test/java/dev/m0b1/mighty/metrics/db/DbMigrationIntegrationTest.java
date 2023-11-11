@@ -120,6 +120,7 @@ class DbMigrationIntegrationTest extends IntegrationTestBase {
     var scorecard = Arguments.of("scorecard", """
       CREATE TABLE scorecard (
       	id INTEGER PRIMARY KEY AUTOINCREMENT,
+      	deleted BOOLEAN,
       	id_member INTEGER,
       	id_coach INTEGER,
       	id_score_group INTEGER,

@@ -63,7 +63,7 @@ class DbMemberRepositoryUnitTest extends UnitTestBase {
     var result = repository.deniedScorecard(oAuth2User, uuid);
 
     verify(jdbcTemplate).queryForObject(
-      "SELECT COUNT(*) FROM scorecard WHERE uuid = ? AND id_member = ?",
+      "SELECT COUNT(*) FROM scorecard WHERE uuid = ? AND id_member = ? AND deleted IS NOT TRUE",
       Long.class,
       uuid,
       1

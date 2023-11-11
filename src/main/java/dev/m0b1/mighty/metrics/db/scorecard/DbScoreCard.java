@@ -19,6 +19,7 @@ public class DbScoreCard {
   public static final String TABLE = "scorecard";
 
   public static final String COLUMN_ID = "id";
+  public static final String COLUMN_DELETED = "deleted";
   public static final String COLUMN_ID_MEMBER = "id_member";
   public static final String COLUMN_ID_COACH = "id_coach";
   public static final String COLUMN_ID_SCORE_GROUP = "id_score_group";

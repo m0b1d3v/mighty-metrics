@@ -33,7 +33,7 @@ public class DbScoreCardRepository {
       DbScoreCard.COLUMN_EXERCISES
     ));
 
-    var sql = String.format("SELECT %s FROM %s WHERE uuid = ?", columns, DbScoreCard.TABLE);
+    var sql = String.format("SELECT %s FROM %s WHERE uuid = ? AND deleted IS NOT TRUE", columns, DbScoreCard.TABLE);
 
     return jdbcTemplate.queryForObject(sql, MAPPER, uuid);
   }
@@ -47,7 +47,7 @@ public class DbScoreCardRepository {
     var exercisesJson = JsonUtil.write(dbScoreCard.getExercises(), "[]");
 
     var inputMap = new LinkedHashMap<String, Object>();
-    inputMap.put(DbScoreCard.COLUMN_ID_MEMBER,  dbScoreCard.getIdMember());
+    inputMap.put(DbScoreCard.COLUMN_ID_MEMBER, dbScoreCard.getIdMember());
     inputMap.put(DbScoreCard.COLUMN_ID_COACH, dbScoreCard.getIdCoach());
     inputMap.put(DbScoreCard.COLUMN_ID_SCORE_GROUP, dbScoreCard.getIdScoreGroup());
     inputMap.put(DbScoreCard.COLUMN_ID_SCORE_PERSONAL, dbScoreCard.getIdScorePersonal());
@@ -66,6 +66,15 @@ public class DbScoreCardRepository {
     );
 
     return dbScoreCard;
+  }
+
+  public void delete(DbScoreCard dbScoreCard) {
+
+    var inputMap = new LinkedHashMap<String, Object>();
+    inputMap.put(DbScoreCard.COLUMN_UUID, dbScoreCard.getUuid());
+    inputMap.put(DbScoreCard.COLUMN_DELETED, true);
+
+    DbUtil.upsert(jdbcTemplate, inputMap, column -> true, DbScoreCard.TABLE, DbScoreCard.COLUMN_UUID);
   }
 
 }
