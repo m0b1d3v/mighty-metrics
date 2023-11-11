@@ -104,7 +104,8 @@ jacocoTestReport {
 sonarqube {
 	properties {
 		property('sonar.host.url', 'https://sonarcloud.io')
-		property('sonar.organization', 'mobiusk')
-		property('sonar.projectKey', 'mobiusk_mighty-metrics')
+		property('sonar.organization', 'm0b1')
+		property('sonar.projectKey', 'm0b1_mighty-metrics')
+		property('sonar.skipCompile', 'true')
 	}
 }
