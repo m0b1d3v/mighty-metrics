@@ -36,8 +36,12 @@ public class DbScoreCard {
 
   private Integer idCoach;
 
+  @Min(value = 1, message = "Invalid score detected")
+  @Max(value = 6, message = "Invalid score detected")
   private Integer idScoreGroup;
 
+  @Min(value = 1, message = "Invalid score detected")
+  @Max(value = 6, message = "Invalid score detected")
   private Integer idScorePersonal;
 
   private UUID uuid;
@@ -45,15 +49,15 @@ public class DbScoreCard {
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
   private LocalDateTime localDateTime;
 
-  @Min(value = 0, message = "Workout intensity must be at least ${value}")
-  @Max(value = 100, message = "Workout intensity cannot be higher than ${value}")
+  @Min(value = 0, message = "Workout intensity must be at least {value}")
+  @Max(value = 100, message = "Workout intensity cannot be higher than {value}")
   private Integer workoutIntensity;
 
-  @Min(value = 0, message = "Mighterium collected must be at least ${value}")
+  @Min(value = 0, message = "Mighterium collected must be at least {value}")
   @Max(value = 100_000, message = "Mighterium collected cannot be higher than the core can count")
   private Integer mighteriumCollected;
 
-  @Size(max = 50, message = "Number of exercises cannot be higher than ${value}")
   private List<DbExercise> exercises = new ArrayList<>();
+  @Size(max = 50, message = "Number of exercises cannot be higher than {value}")
 
 }
