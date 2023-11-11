@@ -10,7 +10,7 @@ public class DbScore {
   public static final String COLUMN_ID = "id";
   public static final String COLUMN_VALUE = "value";
 
-  private Long id;
+  private Integer id;
 
   private String value;
 

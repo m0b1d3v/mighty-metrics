@@ -64,9 +64,9 @@ class DbMigrationIntegrationTest extends IntegrationTestBase {
     var result = dbCoachRepository.read();
 
     assertEquals(3, result.size());
-    assertCoach(result.get(0), 2L, "AyumiKoi");
-    assertCoach(result.get(1), 3L, "Bossun");
-    assertCoach(result.get(2), 1L, "Kugo");
+    assertCoach(result.get(0), 2, "AyumiKoi");
+    assertCoach(result.get(1), 3, "Bossun");
+    assertCoach(result.get(2), 1, "Kugo");
   }
 
   @Test
@@ -75,20 +75,20 @@ class DbMigrationIntegrationTest extends IntegrationTestBase {
     var result = dbScoreRepository.read();
 
     assertEquals(6, result.size());
-    assertScore(result.get(0), 1L, "S+");
-    assertScore(result.get(1), 2L, "S");
-    assertScore(result.get(2), 3L, "A");
-    assertScore(result.get(3), 4L, "B");
-    assertScore(result.get(4), 5L, "C");
-    assertScore(result.get(5), 6L, "D");
+    assertScore(result.get(0), 1, "S+");
+    assertScore(result.get(1), 2, "S");
+    assertScore(result.get(2), 3, "A");
+    assertScore(result.get(3), 4, "B");
+    assertScore(result.get(4), 5, "C");
+    assertScore(result.get(5), 6, "D");
   }
 
-  private void assertCoach(DbCoach dbCoach, long expectedId, String expectedName) {
+  private void assertCoach(DbCoach dbCoach, int expectedId, String expectedName) {
     assertEquals(expectedId, dbCoach.getId());
     assertEquals(expectedName, dbCoach.getName());
   }
 
-  private void assertScore(DbScore dbScore, long expectedId, String expectedValue) {
+  private void assertScore(DbScore dbScore, int expectedId, String expectedValue) {
     assertEquals(expectedId, dbScore.getId());
     assertEquals(expectedValue, dbScore.getValue());
   }

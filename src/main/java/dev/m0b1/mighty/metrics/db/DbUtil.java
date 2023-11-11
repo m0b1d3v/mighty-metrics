@@ -4,6 +4,8 @@ import jakarta.annotation.Nonnull;
 import lombok.experimental.UtilityClass;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.function.Predicate;
@@ -13,6 +15,18 @@ import java.util.function.Predicate;
  */
 @UtilityClass
 public final class DbUtil {
+
+  public static <T> T safeMap(ResultSet resultSet, String column, Class<T> type) throws SQLException {
+
+    var exists = resultSet.getObject(column);
+
+    T result = null;
+    if (exists != null) {
+      result = resultSet.getObject(column, type);
+    }
+
+    return result;
+  }
 
   /**
    * Generates an INSERT statement that swaps to an UPDATE if the primary key given already exists.

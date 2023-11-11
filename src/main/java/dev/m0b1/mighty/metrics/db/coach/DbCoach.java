@@ -10,7 +10,7 @@ public class DbCoach {
   public static final String COLUMN_ID = "id";
   public static final String COLUMN_NAME = "name";
 
-  private Long id;
+  private Integer id;
 
   private String name;
 

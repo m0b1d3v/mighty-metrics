@@ -23,7 +23,8 @@ class DbScoreMapperUnitTest extends UnitTestBase {
 
   @BeforeEach
   public void beforeEach() throws SQLException {
-    when(resultSet.getLong(DbScore.COLUMN_ID)).thenReturn(1L);
+    when(resultSet.getObject(DbScore.COLUMN_ID)).thenReturn(1);
+    when(resultSet.getObject(DbScore.COLUMN_ID, Integer.class)).thenReturn(1);
     when(resultSet.getString(DbScore.COLUMN_VALUE)).thenReturn("a");
   }
 
@@ -33,7 +34,7 @@ class DbScoreMapperUnitTest extends UnitTestBase {
     var result = mapper.mapRow(resultSet, 0);
 
     assertNotNull(result);
-    assertEquals(1L, result.getId());
+    assertEquals(1, result.getId());
     assertEquals("a", result.getValue());
   }
 
