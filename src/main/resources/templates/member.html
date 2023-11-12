@@ -9,10 +9,58 @@
 		<main>
 
 			<h3>
-				Go save your progress with the <a href="/core">Core &rArr;</a>
+				Save new scorecards to the <a href="/core">Core &rArr;</a>
 			</h3>
 
-			<h4>Member page</h4>
+			<hr>
+
+			<h4>
+				Core Analysis Results
+			</h4>
+
+			<ul>
+				<li
+					th:each="statistic : *{statistics}"
+					th:text="${statistic}"
+				/>
+			</ul>
+
+			<hr>
+
+			<h5>
+				Scorecard history
+			</h5>
+
+			<table>
+
+				<thead>
+					<tr>
+						<th>Number</th>
+						<th>Score</th>
+						<th>Date</th>
+						<th>Details</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="scorecard, stat : *{scorecards}">
+						<td th:text="${stat.size - stat.count + 1}"></td>
+						<td>
+							<span
+								th:if="${scorecard.idScorePersonal != null}"
+								th:text="*{scores[__${scorecard.idScorePersonal}__].value}"
+								th:remove="tag"
+							/>
+						</td>
+						<td th:text="${#temporals.format(scorecard.localDateTime, 'YYYY-MM-dd')}"/>
+						<td>
+							<a th:href="'/core/' + ${scorecard.uuid}">&rArr;</a>
+						</td>
+					</tr>
+				</tbody>
+
+			</table>
+
 		</main>
 	</body>
 

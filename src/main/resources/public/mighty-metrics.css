@@ -134,6 +134,31 @@ a:hover {
 }
 
 /*
+Tables
+*/
+
+table {
+	width: 100%;
+}
+
+table, th, td {
+	border: 1px solid var(--color-background-lighter);
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 10px;
+}
+
+th {
+	text-align: left;
+}
+
+td {
+	text-align: right;
+}
+
+/*
 De-emphasizing content
 */
 

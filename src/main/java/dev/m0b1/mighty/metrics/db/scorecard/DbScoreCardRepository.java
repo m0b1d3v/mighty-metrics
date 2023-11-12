@@ -20,6 +20,30 @@ public class DbScoreCardRepository {
 
   private final JdbcTemplate jdbcTemplate;
 
+  public List<DbScoreCard> readAll(Long idMember) {
+
+    var columns = String.join(", ", List.of(
+      DbScoreCard.COLUMN_ID_SCORE_GROUP,
+      DbScoreCard.COLUMN_ID_SCORE_PERSONAL,
+      DbScoreCard.COLUMN_UUID,
+      DbScoreCard.COLUMN_LOCAL_DATE_TIME,
+      DbScoreCard.COLUMN_WORKOUT_INTENSITY,
+      DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED
+    ));
+
+    var sql = """
+      SELECT %s
+      FROM %s
+      WHERE id_member = ?
+      AND deleted IS NOT TRUE
+      ORDER BY local_date_time DESC, id DESC
+      """;
+
+    sql = String.format(sql, columns, DbScoreCard.TABLE);
+
+    return jdbcTemplate.query(sql, MAPPER, idMember);
+  }
+
   public DbScoreCard read(UUID uuid) {
 
     var columns = String.join(", ", List.of(

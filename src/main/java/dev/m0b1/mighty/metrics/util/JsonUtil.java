@@ -16,7 +16,9 @@ public final class JsonUtil {
     T result = null;
 
     try {
-       result = OBJECT_MAPPER.readValue(json, typeReference);
+      if (json != null) {
+        result = OBJECT_MAPPER.readValue(json, typeReference);
+      }
     } catch (Exception e) {
       log.warn("Exception encountered with reading json to object: {} from {}", typeReference, json);
       log.error("Could not read json to object", e);
