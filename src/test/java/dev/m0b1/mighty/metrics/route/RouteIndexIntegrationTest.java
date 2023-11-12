@@ -61,7 +61,7 @@ class RouteIndexIntegrationTest extends IntegrationTestBase {
     var model = assertModel(mvcResult);
     assertTrue((Boolean) model.get(AuthAttributes.LOGGED_IN));
     assertEquals("testUser", model.get(AuthAttributes.NAME));
-    assertEquals("https://cdn.discordapp.com/avatars/testId/testAvatar.png", model.get(AuthAttributes.AVATAR_IMAGE_URL));
+    assertEquals("https://cdn.discordapp.com/avatars/1/testAvatar.png", model.get(AuthAttributes.AVATAR_IMAGE_URL));
 
     playwright(mvcResult);
     assertAccessibility();

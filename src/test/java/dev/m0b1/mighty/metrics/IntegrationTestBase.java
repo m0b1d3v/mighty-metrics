@@ -136,7 +136,7 @@ public class IntegrationTestBase extends UnitTestBase {
 
     var attributes = Map.of(
       AuthAttributes.GLOBAL_NAME, prefix + "User",
-      AuthAttributes.ID, prefix + "Id",
+      AuthAttributes.ID, "1",
       AuthAttributes.AVATAR, prefix + "Avatar"
     );
 

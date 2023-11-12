@@ -1,6 +1,6 @@
 package dev.m0b1.mighty.metrics.route;
 
-import dev.m0b1.mighty.metrics.auth.AuthAttributes;
+import dev.m0b1.mighty.metrics.auth.AuthUtil;
 import dev.m0b1.mighty.metrics.db.coach.DbCoachRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardExercise;
 import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
@@ -73,7 +73,7 @@ public class RouteCore {
     removeExerciseByIndexIfGiven(dbScoreCard, httpServletRequest);
     addExerciseIfDesired(dbScoreCard, httpServletRequest);
 
-    var idUser = getUserIdIfAttributePresent(user);
+    var idUser = AuthUtil.getUserIdIfAttributePresent(user);
     dbScoreCard.setIdMember(idUser);
 
     var result = "core";
@@ -102,18 +102,6 @@ public class RouteCore {
     if (uuid != null && dbMemberRepository.deniedScorecard(user, uuid)) {
       throw new AccessDeniedException("Scorecard update denied.");
     }
-  }
-
-  private Long getUserIdIfAttributePresent(OAuth2User user) {
-
-    Long result = null;
-
-    var id = user.getAttribute(AuthAttributes.ID);
-    if (id != null) {
-      result = Long.valueOf((String) id);
-    }
-
-    return result;
   }
 
   private void addExerciseIfDesired(DbScoreCard dbScoreCard, HttpServletRequest httpServletRequest) {
