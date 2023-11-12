@@ -6,8 +6,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -16,12 +18,31 @@ import java.util.function.Predicate;
 @UtilityClass
 public final class DbUtil {
 
-  public static <T> T safeMap(ResultSet resultSet, String column, Class<T> type) throws SQLException {
+  public static List<String> resultSetColumns(ResultSet resultSet) throws SQLException {
 
-    var exists = resultSet.getObject(column);
+    var result = new ArrayList<String>();
+
+    var metadata = resultSet.getMetaData();
+    var columnCount = metadata.getColumnCount();
+
+    // Result set indexes start at 1
+    for (int i = 1; i <= columnCount; i++) {
+      result.add(metadata.getColumnName(i));
+    }
+
+    return result;
+  }
+
+  public static <T> T safeMap(
+    ResultSet resultSet,
+    List<String> knownColumns,
+    String column,
+    Class<T> type
+  ) throws SQLException {
 
     T result = null;
-    if (exists != null) {
+
+    if (knownColumns.contains(column) && resultSet.getObject(column) != null) {
       result = resultSet.getObject(column, type);
     }
 

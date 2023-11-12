@@ -14,8 +14,10 @@ public class DbCoachMapper implements RowMapper<DbCoach> {
 
     var result = new DbCoach();
 
-    result.setId(DbUtil.safeMap(resultSet, DbCoach.COLUMN_ID, Integer.class));
-    result.setName(resultSet.getString(DbCoach.COLUMN_NAME));
+    var columns = DbUtil.resultSetColumns(resultSet);
+
+    result.setId(DbUtil.safeMap(resultSet, columns, DbCoach.COLUMN_ID, Integer.class));
+    result.setName(DbUtil.safeMap(resultSet, columns, DbCoach.COLUMN_NAME, String.class));
 
     return result;
   }

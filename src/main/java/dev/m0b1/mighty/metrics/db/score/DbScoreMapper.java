@@ -14,8 +14,10 @@ public class DbScoreMapper implements RowMapper<DbScore> {
 
     var result = new DbScore();
 
-    result.setId(DbUtil.safeMap(resultSet, DbScore.COLUMN_ID, Integer.class));
-    result.setValue(resultSet.getString(DbScore.COLUMN_VALUE));
+    var columns = DbUtil.resultSetColumns(resultSet);
+
+    result.setId(DbUtil.safeMap(resultSet, columns, DbScore.COLUMN_ID, Integer.class));
+    result.setValue(DbUtil.safeMap(resultSet, columns, DbScore.COLUMN_VALUE, String.class));
 
     return result;
   }

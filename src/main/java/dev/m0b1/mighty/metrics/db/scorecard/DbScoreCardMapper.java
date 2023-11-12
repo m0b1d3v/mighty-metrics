@@ -17,20 +17,22 @@ public class DbScoreCardMapper implements RowMapper<DbScoreCard> {
   @Override
   public DbScoreCard mapRow(@Nonnull ResultSet resultSet, int rowNumber) throws SQLException {
 
-    var scoreCard = new DbScoreCard();
-    scoreCard.setIdCoach(DbUtil.safeMap(resultSet, DbScoreCard.COLUMN_ID_COACH, Integer.class));
-    scoreCard.setIdScoreGroup(DbUtil.safeMap(resultSet, DbScoreCard.COLUMN_ID_SCORE_GROUP, Integer.class));
-    scoreCard.setIdScorePersonal(DbUtil.safeMap(resultSet, DbScoreCard.COLUMN_ID_SCORE_PERSONAL, Integer.class));
-    scoreCard.setUuid(UUID.fromString(resultSet.getString(DbScoreCard.COLUMN_UUID)));
-    scoreCard.setWorkoutIntensity(DbUtil.safeMap(resultSet, DbScoreCard.COLUMN_WORKOUT_INTENSITY, Integer.class));
-    scoreCard.setMighteriumCollected(DbUtil.safeMap(resultSet, DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED, Integer.class));
+    var columns = DbUtil.resultSetColumns(resultSet);
 
-    var localDateTime = resultSet.getString(DbScoreCard.COLUMN_LOCAL_DATE_TIME);
+    var scoreCard = new DbScoreCard();
+    scoreCard.setIdCoach(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_ID_COACH, Integer.class));
+    scoreCard.setIdScoreGroup(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_ID_SCORE_GROUP, Integer.class));
+    scoreCard.setIdScorePersonal(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_ID_SCORE_PERSONAL, Integer.class));
+    scoreCard.setUuid(UUID.fromString(resultSet.getString(DbScoreCard.COLUMN_UUID)));
+    scoreCard.setWorkoutIntensity(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_WORKOUT_INTENSITY, Integer.class));
+    scoreCard.setMighteriumCollected(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED, Integer.class));
+
+    var localDateTime = DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_LOCAL_DATE_TIME, String.class);
     if (localDateTime != null) {
       scoreCard.setLocalDateTime(LocalDateTime.parse(localDateTime));
     }
 
-    var exercisesJson = resultSet.getString(DbScoreCard.COLUMN_EXERCISES);
+    var exercisesJson = DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_EXERCISES, String.class);
     var typeReference = new TypeReference<List<DbScoreCardExercise>>(){};
     var exercises = JsonUtil.read(exercisesJson, typeReference);
     if (exercises != null) {
