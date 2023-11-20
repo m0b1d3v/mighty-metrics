@@ -39,6 +39,7 @@ public class RouteCore {
   @GetMapping(PATH)
   public String getCore(Model model) {
     var dbScoreCard = new DbScoreCard();
+    dbScoreCard.getExercises().add(new DbScoreCardExercise());
     addModelAttributes(dbScoreCard, model);
     return "core";
   }
