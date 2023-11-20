@@ -16,6 +16,7 @@ public class AuthConfiguration {
   private static final String[] GUEST_ALLOWED_PATTERNS = new String[]{
     "/",
     "/error/**",
+    "/webjars/**",
     "/*.png",
     "/*.ico",
     "/*.css"
