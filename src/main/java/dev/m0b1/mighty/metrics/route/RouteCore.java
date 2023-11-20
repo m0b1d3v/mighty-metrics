@@ -7,10 +7,14 @@ import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
 import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardRepository;
+import dev.m0b1.mighty.metrics.parser.ServiceImageParser;
+import dev.m0b1.mighty.metrics.parser.ServiceLogParser;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -39,6 +43,9 @@ public class RouteCore {
   private final DbMemberRepository dbMemberRepository;
   private final DbScoreCardRepository dbScoreCardRepository;
   private final DbScoreRepository dbScoreRepository;
+  private final ServiceImageParser serviceImageParser;
+  private final ServiceLogParser serviceLogParser;
+
   private Tika tika;
 
   @PostConstruct
@@ -84,6 +91,9 @@ public class RouteCore {
 
     if (shouldReadScorecardImage(httpServletRequest, multipartFile)) {
       // TODO
+      //   - Maintain uuid if already set
+      //   - Merge the parsed image only to score card fields not already set
+      // parseScorecard(dbScoreCard, multipartFile);
     }
 
     removeExerciseByIndexIfGiven(dbScoreCard, httpServletRequest);
