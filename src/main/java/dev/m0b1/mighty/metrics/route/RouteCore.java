@@ -76,9 +76,12 @@ public class RouteCore {
     var idUser = AuthUtil.getUserIdIfAttributePresent(user);
     dbScoreCard.setIdMember(idUser);
 
-    var result = "core";
+    var result = PATH;
     if (bindingResult.hasErrors()) {
       addModelAttributes(dbScoreCard, model);
+    } else if (shouldDeleteScorecard(httpServletRequest)) {
+      dbScoreCardRepository.delete(dbScoreCard);
+      result = String.format("redirect:%s", PATH);
     } else {
       dbScoreCard = dbScoreCardRepository.upsert(dbScoreCard);
       result = String.format("redirect:%s/%s", PATH, dbScoreCard.getUuid());
@@ -87,21 +90,16 @@ public class RouteCore {
     return result;
   }
 
-  @PostMapping(PATH + "/delete")
-  public String deleteScoreCard(
-    @AuthenticationPrincipal OAuth2User user,
-    @Valid @ModelAttribute("scorecard") DbScoreCard dbScoreCard
-  ) {
-    throwIfDeniedScorecard(dbScoreCard, user);
-    dbScoreCardRepository.delete(dbScoreCard);
-    return String.format("redirect:%s", PATH);
-  }
 
   private void throwIfDeniedScorecard(DbScoreCard dbScoreCard, OAuth2User user) {
     var uuid = dbScoreCard.getUuid();
     if (uuid != null && dbMemberRepository.deniedScorecard(user, uuid)) {
       throw new AccessDeniedException("Scorecard update denied.");
     }
+  }
+
+  private boolean shouldDeleteScorecard(HttpServletRequest httpServletRequest) {
+    return httpServletRequest.getParameterMap().containsKey("delete");
   }
 
   private void addExerciseIfDesired(DbScoreCard dbScoreCard, HttpServletRequest httpServletRequest) {
