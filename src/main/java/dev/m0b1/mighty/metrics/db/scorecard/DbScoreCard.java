@@ -36,6 +36,8 @@ public class DbScoreCard {
   @JsonIgnore
   private Long idMember;
 
+  @Min(value = 1, message = "Invalid coach detected")
+  @Max(value = 3, message = "Invalid coach detected")
   private Integer idCoach;
 
   @Min(value = 1, message = "Invalid score detected")
