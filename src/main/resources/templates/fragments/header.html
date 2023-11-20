@@ -16,10 +16,11 @@
 			</h1>
 
 			<h2>
-				A scorecard tracker for <a href="https://themightygym.com">The Mighty Gym</a>
+				Score tracking for <a href="https://themightygym.com">The Mighty Gym</a>
 			</h2>
 
-			<div class="flex-align-items-center" th:if="${loggedIn}">
+			<form method="post" th:action="@{/logout}" th:if="${loggedIn}">
+				<button type="submit" class="contrast outline">
 
 				<img
 					alt="Discord avatar"
@@ -29,12 +30,10 @@
 					width="64px"
 				/>
 
-				<form method="post" th:action="@{/logout}">
-					Stay mighty, <th:block th:text="${name}"/>!
-					When you're ready to take a break, <input type="submit" value="log out"/>.
-				</form>
+					Log Out
 
-			</div>
+				</button>
+			</form>
 
 			<hr/>
 

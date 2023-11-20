@@ -1,14 +1,47 @@
 :root {
-	--color-background: #242424;
-	--color-background-darker: #121212;
-	--color-background-lighter: #353535;
-	--color-primary: #fda815;
-	--color-secondary: #00d2ff;
-	--color-tertiary: #fca5ff;
-	--content-padding: 1.5rem;
-	--min-content-width: 300px;
-	--max-content-width: 640px;
+
+	--font-family: system-ui, -apple-system, sans-serif, 'Open Sans';
+
+	--content-width-min: 300px;
+	--content-width-max: 640px;
+
 	--nav-avatar-image-size: 64px;
+}
+
+[data-theme=dark] {
+
+	--background-color: #242424;
+
+	--primary: hsl(38, 98%, 54%);
+	--primary-hover: hsl(38, 98%, 44%);
+	--primary-focus: hsl(38, 98%, 34%);
+
+	--secondary: hsl(191, 100%, 50%);
+	--secondary-hover: hsl(191, 100%, 40%);
+	--secondary-focus: hsl(191, 100%, 30%);
+
+	--contrast: hsl(298, 100%, 82%);
+	--contrast-hover: hsl(298, 100%, 72%);
+	--contrast-focus: hsl(298, 100%, 62%);
+
+	--muted-border-color: #353535;
+
+}
+
+body {
+
+	border-color: var(--primary);
+	border-style: solid;
+	border-width: 5px 0 4px;
+
+	border-image-slice: 1;
+	border-image-source: linear-gradient(
+		to right,
+		var(--secondary) 5%,
+		var(--primary) 5%,
+		var(--primary) 95%,
+		var(--contrast) 95%
+	);
 }
 
 /*
@@ -16,50 +49,12 @@ Background container
 */
 
 body, html {
-	background-color: var(--color-background);
-	box-sizing: border-box;
-	margin: 0;
 	padding: 0;
 }
 
 html {
-	min-width: var(--min-content-width);
+	min-width: var(--content-width-min);
 }
-
-body {
-	border-color: var(--color-primary);
-	border-style: solid;
-	border-width: 5px 0 4px;
-
-	border-image-slice: 1;
-	border-image-source: linear-gradient(
-		to right,
-		var(--color-secondary) 5%,
-		var(--color-primary) 5%,
-		var(--color-primary) 95%,
-		var(--color-tertiary) 95%
-	);
-
-	font-family: 'Open Sans', sans-serif;
-	font-weight: 400;
-	line-height: 1.5;
-}
-
-/*
-Typography sizes
-*/
-
-h1, h2, h3, h4, h5, h6 {
-	font-weight: 400;
-	margin: 0 0 var(--content-padding);
-}
-
-h1, h1 a { font-size: 2.0rem; }
-h2, h2 a { font-size: 1.8rem; }
-h3, h3 a { font-size: 1.6rem; }
-h4, h4 a { font-size: 1.4rem; }
-h5, h5 a { font-size: 1.2rem; }
-h6, a, p, li { font-size: 1rem; }
 
 /*
 Content container
@@ -69,16 +64,19 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	padding: var(--content-padding);
+	padding: var(--spacing);
 }
 
-header, nav, main, footer {
+body > header,
+body > main,
+body > footer {
 	margin: 0 auto;
-	max-width: var(--max-content-width);
+	max-width: var(--content-width-max);
+	padding: 0;
 	width: 100%;
 }
 
-footer {
+body > footer {
 	margin-top: auto;
 }
 
@@ -86,21 +84,22 @@ footer {
 Content separation
 */
 
+h1, h2, h3, h4, h5, h6 {
+	margin: 0 0 var(--spacing);
+}
+
 hr {
-	background-color: var(--color-background-lighter);
-	border: none;
-	height: 2px;
-	margin: var(--content-padding) 0;
+	border-width: 2px;
+	margin: var(--spacing) 0;
+}
+
+table input, table select, table button {
+	margin-bottom: 0 !important;
 }
 
 /*
 Images
 */
-
-img {
-	height: auto;
-	max-width: 100%;
-}
 
 header img {
 	max-width: 50%;
@@ -108,91 +107,14 @@ header img {
 
 .avatar {
 	border-radius: calc(var(--nav-avatar-image-size) / 2);
+	margin-right: var(--spacing);
 	width: var(--nav-avatar-image-size);
-}
-
-/*
-Lists
-*/
-
-ul li {
-	list-style-type: circle;
-}
-
-/*
-Links
-*/
-
-a {
-	text-decoration: underline;
-	text-decoration-color: var(--color-primary);
-	text-decoration-thickness: 3px;
-}
-
-a:hover {
-	filter: brightness(1.25);
-}
-
-/*
-Tables
-*/
-
-table {
-	width: 100%;
-}
-
-table, th, td {
-	border: 1px solid var(--color-background-lighter);
-	border-collapse: collapse;
-}
-
-th, td {
-	padding: 10px;
-}
-
-th {
-	text-align: left;
-}
-
-td {
-	text-align: right;
-}
-
-/*
-De-emphasizing content
-*/
-
-a, body {
-	color: #dddddd;
-}
-
-small {
-	color: #aaaaaa;
-	display: block;
 }
 
 /*
 Positioning
 */
 
-.flex-align-items-center {
-	align-items: center;
-	display: flex;
-	justify-content: center;
-}
-
 .text-align-center {
 	text-align: center;
-}
-
-.margin-right {
-	margin-right: var(--content-padding);
-}
-
-/*
-Forms
-*/
-
-:invalid, .input-error {
-	border-color: red;
 }

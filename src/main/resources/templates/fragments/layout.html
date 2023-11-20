@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" th:fragment="layout(title, content)">
+<html
+	lang="en"
+	data-theme="dark"
+	xmlns:th="https://www.thymeleaf.org"
+	th:fragment="layout(title, content)"
+>
 
 	<head th:replace="~{fragments/head :: head(${title})}">
 		<title>Mighty Metrics - Layout</title>

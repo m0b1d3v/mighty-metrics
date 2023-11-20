@@ -50,134 +50,144 @@
 				<hr>
 
 				<label for="coach">Coach</label>
-				<br/>
 				<select
 					id="coach"
 					th:field="*{idCoach}"
-					th:errorclass="input-error"
+					th:attr="aria-invalid=${#fields.hasErrors('localDateTime') ? 'true' : ''}"
 				>
 					<option value=""></option>
 					<option th:each="option : ${coaches}" th:value="${option.id}" th:text="${option.name}">
 				</select>
 
-				<br/>
-
 				<label for="localDateTime">Time</label>
-				<br/>
 				<input
 					id="localDateTime"
 					type="datetime-local"
 					th:field="*{localDateTime}"
-					th:errorclass="input-error"
+					th:attr="aria-invalid=${#fields.hasErrors('localDateTime') ? 'true' : ''}"
 				>
 
-				<br/>
-
-				<label for="groupAverage">Group Average</label>
-				<br/>
+				<label for="groupScore">Group Score</label>
 				<select
-					id="groupAverage"
+					id="groupScore"
 					th:field="*{idScoreGroup}"
-					th:errorclass="input-error"
+					th:attr="aria-invalid=${#fields.hasErrors('idScoreGroup') ? 'true' : ''}"
 				>
 					<option value=""></option>
 					<option th:each="option : ${scores}" th:value="${option.id}" th:text="${option.value}">
 				</select>
 
-				<br/>
-
-				<label for="personalAverage">Personal Average</label>
-				<br/>
+				<label for="personalScore">Personal Score</label>
 				<select
-					id="personalAverage"
+					id="personalScore"
 					th:field="*{idScorePersonal}"
-					th:errorclass="input-error"
+					th:attr="aria-invalid=${#fields.hasErrors('idScorePersonal') ? 'true' : ''}"
 				>
 					<option value=""></option>
 					<option th:each="option : ${scores}" th:value="${option.id}" th:text="${option.value}">
 				</select>
-
-				<br/>
 
 				<label for="workoutIntensity">Workout Intensity</label>
-				<br/>
 				<input
 					id="workoutIntensity"
 					type="number"
 					min="0"
 					max="100"
 					th:field="*{workoutIntensity}"
-					th:errorclass="input-error"
+					th:attr="aria-invalid=${#fields.hasErrors('workoutIntensity') ? 'true' : ''}"
 				>
 
-				<br/>
-
 				<label for="mighteriumCollected">Mighterium Collected</label>
-				<br/>
 				<input
 					id="mighteriumCollected"
 					type="number"
 					min="0"
 					max="100000"
 					th:field="*{mighteriumCollected}"
-					th:errorclass="input-error"
+					th:attr="aria-invalid=${#fields.hasErrors('mighteriumCollected') ? 'true' : ''}"
 				>
 
-				<br/>
+				<div th:if="${ ! scorecard.exercises.isEmpty()}">
 
-				<label for="exercise">Exercise</label>
-				<label for="exerciseScore">Score</label>
+					<datalist id="exercises">
+						<option>Arm Circles</option>
+						<option>DDR Lunges</option>
+						<option>Running</option>
+					</datalist>
 
-				<br/>
+					<table role="grid">
 
-				<div th:each="exercise, stat : *{exercises}">
+						<thead>
+						<tr>
+							<th>
+								<label for="exercise">Exercise</label>
+							</th>
+							<th>
+								<label for="exerciseScore">Score</label>
+							</th>
+							<th>
+								Remove
+							</th>
+						</tr>
+						</thead>
 
-					<button
-						type="submit"
-						name="remove"
-						title="Remove exercise"
-						th:value="${stat.index}"
-						th:text="'-'"
-					/>
+						<tbody>
 
-					<input
-						id="exercise"
-						name="exercise[]"
-						type="text"
-						list="exercises"
-						th:field="*{exercises[__${stat.index}__].exercise}"
-						th:errorclass="input-error"
-					>
+						<tr th:each="exercise, stat : *{exercises}">
+							<td>
+								<input
+									id="exercise"
+									list="exercises"
+									name="exercise[]"
+									type="text"
+									th:field="*{exercises[__${stat.index}__].exercise}"
+									th:attr="aria-invalid=${#fields.hasErrors('exercises[__${stat.index}__].exercise') ? 'true' : ''}"
+								>
+							</td>
+							<td>
+								<select
+									id="exerciseScore"
+									name="exerciseScore[]"
+									th:field="*{exercises[__${stat.index}__].idScore}"
+									th:attr="aria-invalid=${#fields.hasErrors('exercises[__${stat.index}__].idScore') ? 'true' : ''}"
+								>
+									<option value=""></option>
+									<option th:each="option : ${scores}" th:value="${option.id}" th:text="${option.value}">
+								</select>
+							</td>
+							<td>
+								<button
+									class="contrast outline"
+									name="remove"
+									type="submit"
+									th:value="${stat.index}"
+								>
+									-
+								</button>
+							</td>
+						</tr>
 
-					<select
-						id="exerciseScore"
-						th:field="*{exercises[__${stat.index}__].idScore}"
-						th:errorclass="input-error"
-					>
-						<option value=""></option>
-						<option th:each="option : ${scores}" th:value="${option.id}" th:text="${option.value}">
-					</select>
+						<tr>
+							<td colspan="3">
+								<button
+									class="secondary"
+									type="submit"
+									name="add"
+								>
+									Add Exercise
+								</button>
+							</td>
+						</tr>
+
+						</tbody>
+
+					</table>
 
 				</div>
 
-				<button
-					type="submit"
-					name="add"
-					title="Add exercise"
-					th:text="'+'"
-				/>
-
-				<datalist id="exercises">
-					<option>Arm Circles</option>
-					<option>DDR Lunges</option>
-					<option>Running</option>
-				</datalist>
-
-				<br/>
-
-				<input type="submit" value="Save scorecard"/>
-
-			</form>
+				<button type="submit">
+					Save
+				</button>
 
 				<button
 					th:if="${scorecard.uuid != null}"
