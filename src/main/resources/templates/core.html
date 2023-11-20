@@ -12,15 +12,42 @@
 				Return to view progress on your <a href="/">&lArr; profile</a>
 			</h3>
 
-			<form th:method="post" th:action="@{/core}" th:object="${scorecard}">
+			<hr>
+
+			<form
+				enctype="multipart/form-data"
+				th:method="post"
+				th:action="@{/core}"
+				th:object="${scorecard}"
+			>
 
 				<input type="hidden" th:field="*{uuid}"/>
 
-				<ul th:if="${#fields.hasAnyErrors()}">
-					<li th:each="error : ${#fields.allErrors()}" th:text="${error}"/>
-				</ul>
+				<div th:if="${#fields.hasAnyErrors()}">
 
-				<br/>
+					<ul>
+						<li th:each="error : ${#fields.allErrors()}" th:text="${error}"/>
+					</ul>
+
+					<hr>
+
+				</div>
+
+				<label for="file">Upload scorecard image for automated form entry</label>
+				<input
+					accept="image/jpeg,image/png"
+					id="file"
+					name="file"
+					type="file"
+				>
+
+				<input
+					name="image"
+					type="submit"
+					value="Upload Image"
+				/>
+
+				<hr>
 
 				<label for="coach">Coach</label>
 				<br/>

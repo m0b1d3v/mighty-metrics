@@ -7,9 +7,11 @@ import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
 import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.tika.Tika;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
@@ -35,6 +39,12 @@ public class RouteCore {
   private final DbMemberRepository dbMemberRepository;
   private final DbScoreCardRepository dbScoreCardRepository;
   private final DbScoreRepository dbScoreRepository;
+  private Tika tika;
+
+  @PostConstruct
+  private void postConstruct() {
+    tika = new Tika();
+  }
 
   @GetMapping(PATH)
   public String getCore(Model model) {
@@ -63,6 +73,7 @@ public class RouteCore {
   @PostMapping(PATH)
   public String postScoreCard(
     @AuthenticationPrincipal OAuth2User user,
+    @RequestParam("file") MultipartFile multipartFile,
     @Valid @ModelAttribute("scorecard") DbScoreCard dbScoreCard,
     BindingResult bindingResult,
     Model model,
@@ -70,6 +81,10 @@ public class RouteCore {
   ) {
 
     throwIfDeniedScorecard(dbScoreCard, user);
+
+    if (shouldReadScorecardImage(httpServletRequest, multipartFile)) {
+      // TODO
+    }
 
     removeExerciseByIndexIfGiven(dbScoreCard, httpServletRequest);
     addExerciseIfDesired(dbScoreCard, httpServletRequest);
@@ -97,6 +112,12 @@ public class RouteCore {
     if (uuid != null && dbMemberRepository.deniedScorecard(user, uuid)) {
       throw new AccessDeniedException("Scorecard update denied.");
     }
+  }
+
+  private boolean shouldReadScorecardImage(HttpServletRequest httpServletRequest, MultipartFile file) {
+    return httpServletRequest.getParameterMap().containsKey("image")
+      && file != null
+      && ! file.isEmpty();
   }
 
   private boolean shouldDeleteScorecard(HttpServletRequest httpServletRequest) {
