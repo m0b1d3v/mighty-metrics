@@ -1,5 +1,6 @@
 package dev.m0b1.mighty.metrics.db;
 
+import dev.m0b1.mighty.metrics.util.LogUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.SmartInitializingSingleton;
@@ -58,8 +59,12 @@ public class DbMigration implements SmartInitializingSingleton {
         try {
           runMigration(migrationFilePath);
         } catch (Exception e) {
-          log.warn("Could not run migration file: {}", migrationFilePath);
-          log.error("Exception occurred while running migration", e);
+          log.atError()
+            .setMessage("Could not run migration file")
+            .setCause(e)
+            .addMarker(LogUtil.kv("path", migrationFilePath))
+            .log();
+
           throw new RuntimeException(e);
         }
 
@@ -80,7 +85,12 @@ public class DbMigration implements SmartInitializingSingleton {
   }
 
   private void runMigration(String migrationFilePath) throws Exception {
-    log.info("Running migration: {}", migrationFilePath);
+
+    log.atInfo()
+      .setMessage("Running migration")
+      .addMarker(LogUtil.kv("path", migrationFilePath))
+      .log();
+
     var sql = readMigrationFile(migrationFilePath);
     jdbcTemplate.execute(sql);
   }

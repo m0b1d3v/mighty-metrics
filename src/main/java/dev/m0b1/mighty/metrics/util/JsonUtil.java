@@ -20,8 +20,12 @@ public final class JsonUtil {
         result = OBJECT_MAPPER.readValue(json, typeReference);
       }
     } catch (Exception e) {
-      log.warn("Exception encountered with reading json to object: {} from {}", typeReference, json);
-      log.error("Could not read json to object", e);
+      log.atError()
+        .setMessage("Exception encountered with reading JSON to object")
+        .setCause(e)
+        .addMarker(LogUtil.kv("typeReference", typeReference))
+        .addMarker(LogUtil.kv("json", json))
+        .log();
     }
 
     return result;
@@ -34,8 +38,11 @@ public final class JsonUtil {
     try {
       result = OBJECT_MAPPER.writeValueAsString(input);
     } catch (Exception e) {
-      log.warn("Exception encountered with writing object to json: {}", input);
-      log.error("Could not write object to json", e);
+      log.atError()
+        .setMessage("Exception encountered with writing object to JSON")
+        .setCause(e)
+        .addMarker(LogUtil.kv("json", input))
+        .log();
     }
 
     return result;

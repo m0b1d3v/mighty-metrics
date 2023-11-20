@@ -34,6 +34,10 @@ dependencies {
 	// Disable template caching, automatic restart, live reload
 	developmentOnly('org.springframework.boot:spring-boot-devtools')
 
+	// Used for JSON formatting of log messages
+	// As of logback-classic:1.4.8 it includes a native JSON encoder, but it is not configurable for our purposes
+	implementation('net.logstash.logback:logstash-logback-encoder:7.4')
+
 	// Image recognition
 	implementation('com.google.guava:guava:32.1.2-jre')
 	implementation('com.google.cloud:google-cloud-vision:3.22.0') {
