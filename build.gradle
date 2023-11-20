@@ -38,6 +38,10 @@ dependencies {
 	// As of logback-classic:1.4.8 it includes a native JSON encoder, but it is not configurable for our purposes
 	implementation('net.logstash.logback:logstash-logback-encoder:7.4')
 
+	// File recognition
+	implementation('org.apache.tika:tika-core:2.9.1')
+	implementation('org.apache.tika:tika-parsers-standard-package:2.9.1')
+
 	// Image recognition
 	implementation('com.google.guava:guava:32.1.2-jre')
 	implementation('com.google.cloud:google-cloud-vision:3.22.0') {
