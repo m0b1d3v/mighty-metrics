@@ -190,7 +190,7 @@ public class IntegrationTestBase extends UnitTestBase {
 
     var response = mvcResult.getResponse();
     var html = response.getContentAsString();
-    var formattedHtml = String.format("data:text/html,%s", html);
+    var formattedHtml = STR."data:text/html,\{html}";
 
     page.navigate(formattedHtml);
 
@@ -209,7 +209,7 @@ public class IntegrationTestBase extends UnitTestBase {
 
   private void addCss() {
 
-    var cssPath = String.format("http://localhost:%d/mighty-metrics.css", port);
+    var cssPath = STR."http://localhost:\{port}/mighty-metrics.css";
 
     var tagOptions = new Page.AddStyleTagOptions();
     tagOptions.setUrl(cssPath);

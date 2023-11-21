@@ -175,7 +175,7 @@ public class ServiceImageParser {
 
   private String parseGroupAverage(List<ImageText> imageTexts) {
     var scorePattern = "([A-Z]\\+?)";
-    var regex = String.format("^%s", scorePattern);
+    var regex = STR."^\{scorePattern}";
     return findByNormalizedPosition(imageTexts, 0.09028, 0.20313)
       .map(text -> findMatchingGroup(text.getValue(), regex, 1))
       .orElse(null);
@@ -183,7 +183,7 @@ public class ServiceImageParser {
 
   private String parsePersonalAverage(List<ImageText> imageTexts) {
     var scorePattern = "([A-Z]\\+?)";
-    var regex = String.format("^%s\\s*%s", scorePattern, scorePattern);
+    var regex = STR."^\{scorePattern}\\s*\{scorePattern}";
     return findByNormalizedPosition(imageTexts, 0.09028, 0.20313)
       .map(text -> findMatchingGroup(text.getValue(), regex, 2))
       .orElse(null);
@@ -191,7 +191,7 @@ public class ServiceImageParser {
 
   private String parseWorkoutIntensity(List<ImageText> imageTexts) {
     var scorePattern = "([A-Z]\\+?)";
-    var regex = String.format("^%s\\s*%s\\s*(\\d+)", scorePattern, scorePattern);
+    var regex = STR."^\{scorePattern}\\s*\{scorePattern}\\s*(\\d+)";
     return findByNormalizedPosition(imageTexts, 0.09028, 0.20313)
       .map(text -> findMatchingGroup(text.getValue(), regex, 3))
       .orElse(null);

@@ -16,13 +16,13 @@ public class DbCoachRepository {
 
   public List<DbCoach> read() {
 
-    var sql = String.format(
-      "SELECT %s, %s FROM %s ORDER BY %s",
-      DbCoach.COLUMN_ID,
-      DbCoach.COLUMN_NAME,
-      DbCoach.TABLE,
-      DbCoach.COLUMN_NAME
-    );
+    var sql = STR."""
+      SELECT
+        \{DbCoach.COLUMN_ID},
+        \{DbCoach.COLUMN_NAME}
+      FROM \{DbCoach.TABLE}
+      ORDER BY \{DbCoach.COLUMN_NAME}
+      """;
 
     return jdbcTemplate.query(sql, MAPPER);
   }

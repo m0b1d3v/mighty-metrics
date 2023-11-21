@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
 
+import static java.lang.StringTemplate.STR;
+
 @Repository
 @RequiredArgsConstructor
 @Slf4j
@@ -22,42 +24,41 @@ public class DbScoreCardRepository {
 
   public List<DbScoreCard> readAll(Long idMember) {
 
-    var columns = String.join(", ", List.of(
-      DbScoreCard.COLUMN_ID_SCORE_GROUP,
-      DbScoreCard.COLUMN_ID_SCORE_PERSONAL,
-      DbScoreCard.COLUMN_UUID,
-      DbScoreCard.COLUMN_LOCAL_DATE_TIME,
-      DbScoreCard.COLUMN_WORKOUT_INTENSITY,
-      DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED
-    ));
-
-    var sql = """
-      SELECT %s
-      FROM %s
-      WHERE id_member = ?
-      AND deleted IS NOT TRUE
-      ORDER BY local_date_time DESC, id DESC
+    var sql = STR."""
+      SELECT
+        \{DbScoreCard.COLUMN_ID_SCORE_GROUP},
+        \{DbScoreCard.COLUMN_ID_SCORE_PERSONAL},
+        \{DbScoreCard.COLUMN_UUID},
+        \{DbScoreCard.COLUMN_DATE},
+        \{DbScoreCard.COLUMN_TIME},
+        \{DbScoreCard.COLUMN_WORKOUT_INTENSITY},
+        \{DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED}
+      FROM \{DbScoreCard.TABLE}
+      WHERE \{DbScoreCard.COLUMN_ID_MEMBER} = ?
+        AND \{DbScoreCard.COLUMN_DELETED} IS NOT TRUE
+      ORDER BY \{DbScoreCard.COLUMN_DATE} DESC, \{DbScoreCard.COLUMN_TIME} DESC, \{DbScoreCard.COLUMN_ID} DESC
       """;
-
-    sql = String.format(sql, columns, DbScoreCard.TABLE);
 
     return jdbcTemplate.query(sql, MAPPER, idMember);
   }
 
   public DbScoreCard read(UUID uuid) {
 
-    var columns = String.join(", ", List.of(
-      DbScoreCard.COLUMN_ID_COACH,
-      DbScoreCard.COLUMN_ID_SCORE_GROUP,
-      DbScoreCard.COLUMN_ID_SCORE_PERSONAL,
-      DbScoreCard.COLUMN_UUID,
-      DbScoreCard.COLUMN_LOCAL_DATE_TIME,
-      DbScoreCard.COLUMN_WORKOUT_INTENSITY,
-      DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED,
-      DbScoreCard.COLUMN_EXERCISES
-    ));
-
-    var sql = String.format("SELECT %s FROM %s WHERE uuid = ? AND deleted IS NOT TRUE", columns, DbScoreCard.TABLE);
+    var sql = STR."""
+      SELECT
+        \{DbScoreCard.COLUMN_ID_COACH},
+        \{DbScoreCard.COLUMN_ID_SCORE_GROUP},
+        \{DbScoreCard.COLUMN_ID_SCORE_PERSONAL},
+        \{DbScoreCard.COLUMN_UUID},
+        \{DbScoreCard.COLUMN_DATE},
+        \{DbScoreCard.COLUMN_TIME},
+        \{DbScoreCard.COLUMN_WORKOUT_INTENSITY},
+        \{DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED},
+        \{DbScoreCard.COLUMN_EXERCISES}
+      FROM \{DbScoreCard.TABLE}
+      WHERE \{DbScoreCard.COLUMN_UUID} = ?
+        AND \{DbScoreCard.COLUMN_DELETED} IS NOT TRUE
+      """;
 
     return jdbcTemplate.queryForObject(sql, MAPPER, uuid);
   }
@@ -76,7 +77,8 @@ public class DbScoreCardRepository {
     inputMap.put(DbScoreCard.COLUMN_ID_SCORE_GROUP, dbScoreCard.getIdScoreGroup());
     inputMap.put(DbScoreCard.COLUMN_ID_SCORE_PERSONAL, dbScoreCard.getIdScorePersonal());
     inputMap.put(DbScoreCard.COLUMN_UUID, dbScoreCard.getUuid());
-    inputMap.put(DbScoreCard.COLUMN_LOCAL_DATE_TIME, dbScoreCard.getLocalDateTime());
+    inputMap.put(DbScoreCard.COLUMN_DATE, dbScoreCard.getDate());
+    inputMap.put(DbScoreCard.COLUMN_TIME, dbScoreCard.getTime());
     inputMap.put(DbScoreCard.COLUMN_WORKOUT_INTENSITY, dbScoreCard.getWorkoutIntensity());
     inputMap.put(DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED, dbScoreCard.getMighteriumCollected());
     inputMap.put(DbScoreCard.COLUMN_EXERCISES, exercisesJson);

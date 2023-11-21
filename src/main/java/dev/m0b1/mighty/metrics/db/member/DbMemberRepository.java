@@ -19,8 +19,15 @@ public class DbMemberRepository {
 
   public boolean deniedScorecard(OAuth2User oAuth2User, UUID uuid) {
 
+    var sql = STR."""
+      SELECT COUNT(*)
+      FROM \{DbScoreCard.TABLE}
+      WHERE \{DbScoreCard.COLUMN_UUID} = ?
+        AND \{DbScoreCard.COLUMN_ID_MEMBER} = ?
+        AND \{DbScoreCard.COLUMN_DELETED} IS NOT TRUE
+      """;
+
     var userId = oAuth2User.getAttribute(AuthAttributes.ID);
-    var sql = String.format("SELECT COUNT(*) FROM %s WHERE uuid = ? AND id_member = ? AND deleted IS NOT TRUE", DbScoreCard.TABLE);
     var matchingColumns = jdbcTemplate.queryForObject(sql, Long.class, uuid, userId);
 
     return matchingColumns == null || matchingColumns < 1;

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,19 +72,21 @@ public final class DbUtil {
 
     var conflictUpdates = columns.stream()
       .filter(conflictUpdateFilter)
-      .map(k -> k + " = excluded." + k)
+      .map(k -> STR."\{k} = excluded.\{k}")
       .toList();
 
-    var sql = String.format(
-      "INSERT INTO %s (%s) VALUES (%s) ON CONFLICT (%s) DO UPDATE SET %s",
-      table,
-      String.join(", ", columns),
-      String.join(", ", insertPlaceholders),
-      idColumn,
-      String.join(", ", conflictUpdates)
-    );
+    var sql = STR."""
+      INSERT INTO \{table} (\{joinValues(columns)})
+      VALUES (\{joinValues(insertPlaceholders)})
+      ON CONFLICT (\{idColumn})
+      DO UPDATE SET \{joinValues(conflictUpdates)}
+      """;
 
     jdbcTemplate.update(sql, values);
+  }
+
+  private static String joinValues(Collection<String> values) {
+    return String.join(", ", values);
   }
 
 }

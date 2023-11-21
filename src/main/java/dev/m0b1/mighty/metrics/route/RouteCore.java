@@ -107,15 +107,14 @@ public class RouteCore {
       addModelAttributes(dbScoreCard, model);
     } else if (shouldDeleteScorecard(httpServletRequest)) {
       dbScoreCardRepository.delete(dbScoreCard);
-      result = String.format("redirect:%s", PATH);
+      result = STR."redirect:\{PATH}";
     } else {
       dbScoreCard = dbScoreCardRepository.upsert(dbScoreCard);
-      result = String.format("redirect:%s/%s", PATH, dbScoreCard.getUuid());
+      result = STR."redirect:\{PATH}/\{dbScoreCard.getUuid()}";
     }
 
     return result;
   }
-
 
   private void throwIfDeniedScorecard(DbScoreCard dbScoreCard, OAuth2User user) {
     var uuid = dbScoreCard.getUuid();

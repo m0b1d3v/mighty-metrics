@@ -16,13 +16,13 @@ public class DbScoreRepository {
 
   public List<DbScore> read() {
 
-    var sql = String.format(
-      "SELECT %s, %s FROM %s ORDER BY %s",
-      DbScore.COLUMN_ID,
-      DbScore.COLUMN_VALUE,
-      DbScore.TABLE,
-      DbScore.COLUMN_ID
-    );
+    var sql = STR."""
+      SELECT
+        \{DbScore.COLUMN_ID},
+        \{DbScore.COLUMN_VALUE}
+      FROM \{DbScore.TABLE}
+      ORDER BY \{DbScore.COLUMN_ID}
+      """;
 
     return jdbcTemplate.query(sql, MAPPER);
   }

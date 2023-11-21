@@ -48,12 +48,12 @@ class DbMigrationIntegrationTest extends IntegrationTestBase {
   @ValueSource(strings = {"member", "scorecard"})
   void index(String table) {
 
-    var indexName = String.format("index_%s_uuid", table);
+    var indexName = STR."index_\{table}_uuid";
 
     var sql = "SELECT sql FROM sqlite_master WHERE type='index' AND name=? AND tbl_name=?;";
     var result = jdbcTemplate.queryForObject(sql, String.class, indexName, table);
 
-    var expected = String.format("CREATE UNIQUE INDEX %s ON %s (uuid)", indexName, table);
+    var expected = STR."CREATE UNIQUE INDEX \{indexName} ON \{table} (uuid)";
 
     assertEquals(expected, result);
   }

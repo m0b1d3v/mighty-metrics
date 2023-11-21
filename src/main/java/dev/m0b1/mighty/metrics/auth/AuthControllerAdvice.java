@@ -34,7 +34,7 @@ public class AuthControllerAdvice {
     var userId = user.getAttribute(AuthAttributes.ID);
     var avatar = user.getAttribute(AuthAttributes.AVATAR);
 
-    return String.format("https://cdn.discordapp.com/avatars/%s/%s.png", userId, avatar);
+    return STR."https://cdn.discordapp.com/avatars/\{userId}/\{avatar}.png";
   }
 
 }

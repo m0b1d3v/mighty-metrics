@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedList;
@@ -80,7 +80,7 @@ public class DbMigration implements SmartInitializingSingleton {
   }
 
   private void setSchemaVersion(Integer version) {
-    var sql = String.format("PRAGMA user_version = %d;", version);
+    var sql = STR."PRAGMA user_version = \{version};";
     jdbcTemplate.execute(sql);
   }
 

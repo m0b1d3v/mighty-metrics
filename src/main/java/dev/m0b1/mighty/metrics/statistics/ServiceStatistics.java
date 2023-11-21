@@ -123,7 +123,7 @@ public class ServiceStatistics {
 
   private void add(List<String> statistics, Integer input, String suffix) {
     var formattedInput = STATISTIC_FORMAT.format(input);
-    var statistic = String.format("%s %s", formattedInput, suffix);
+    var statistic = STR."\{formattedInput} \{suffix}";
     statistics.add(statistic);
   }
 
