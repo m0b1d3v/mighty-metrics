@@ -7,7 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -23,7 +24,8 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
   private JdbcTemplate jdbcTemplate;
 
   private final DbScoreCard dbScoreCard = new DbScoreCard();
-  private final LocalDateTime localDateTime = LocalDateTime.now();
+  private final LocalDate date = LocalDate.now();
+  private final LocalTime time = LocalTime.now();
   private final UUID uuid = UUID.randomUUID();
 
   @BeforeEach
@@ -38,7 +40,8 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
     dbScoreCard.setIdScoreGroup(3);
     dbScoreCard.setIdScorePersonal(4);
     dbScoreCard.setUuid(uuid);
-    dbScoreCard.setLocalDateTime(localDateTime);
+    dbScoreCard.setDate(date);
+    dbScoreCard.setTime(time);
     dbScoreCard.setWorkoutIntensity(5);
     dbScoreCard.setMighteriumCollected(6);
     dbScoreCard.getExercises().add(exercise);
@@ -79,7 +82,8 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
       3,
       4,
       uuid,
-      localDateTime,
+      date,
+      time,
       5,
       6,
       "[{\"idScore\":1,\"exercise\":\"Push ups\"}]"
@@ -102,7 +106,8 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
       eq(3),
       eq(4),
       any(UUID.class),
-      eq(localDateTime),
+      eq(date),
+      eq(time),
       eq(5),
       eq(6),
       eq("[{\"idScore\":1,\"exercise\":\"Push ups\"}]")

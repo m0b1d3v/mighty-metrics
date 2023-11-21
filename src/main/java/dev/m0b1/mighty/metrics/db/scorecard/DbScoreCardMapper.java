@@ -8,7 +8,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,9 +28,14 @@ public class DbScoreCardMapper implements RowMapper<DbScoreCard> {
     scoreCard.setWorkoutIntensity(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_WORKOUT_INTENSITY, Integer.class));
     scoreCard.setMighteriumCollected(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED, Integer.class));
 
-    var localDateTime = DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_LOCAL_DATE_TIME, String.class);
-    if (localDateTime != null) {
-      scoreCard.setLocalDateTime(LocalDateTime.parse(localDateTime));
+    var localDate = DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_DATE, String.class);
+    if (localDate != null) {
+      scoreCard.setDate(LocalDate.parse(localDate));
+    }
+
+    var localTime = DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_TIME, String.class);
+    if (localTime != null) {
+      scoreCard.setTime(LocalTime.parse(localTime));
     }
 
     var exercisesJson = DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_EXERCISES, String.class);

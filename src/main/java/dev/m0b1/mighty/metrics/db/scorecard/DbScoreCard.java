@@ -8,7 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +26,8 @@ public class DbScoreCard {
   public static final String COLUMN_ID_SCORE_GROUP = "id_score_group";
   public static final String COLUMN_ID_SCORE_PERSONAL = "id_score_personal";
   public static final String COLUMN_UUID = "uuid";
-  public static final String COLUMN_LOCAL_DATE_TIME = "local_date_time";
+  public static final String COLUMN_DATE = "date";
+  public static final String COLUMN_TIME = "time";
   public static final String COLUMN_WORKOUT_INTENSITY = "workout_intensity";
   public static final String COLUMN_MIGHTERIUM_COLLECTED = "mighterium_collected";
   public static final String COLUMN_EXERCISES = "exercises";
@@ -50,8 +52,11 @@ public class DbScoreCard {
 
   private UUID uuid;
 
-  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-  private LocalDateTime localDateTime;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate date;
+
+  @DateTimeFormat(pattern = "HH:mm")
+  private LocalTime time;
 
   @Min(value = 0, message = "Workout intensity must be at least {value}")
   @Max(value = 100, message = "Workout intensity cannot be higher than {value}")

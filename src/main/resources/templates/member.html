@@ -52,7 +52,7 @@
 								th:remove="tag"
 							/>
 						</td>
-						<td th:text="${#temporals.format(scorecard.localDateTime, 'YYYY-MM-dd')}"/>
+						<td th:text="${#temporals.format(scorecard.date, 'YYYY-MM-dd')}"/>
 						<td>
 							<a th:href="'/core/' + ${scorecard.uuid}">&rArr;</a>
 						</td>
