@@ -96,7 +96,7 @@ public class ServiceStatistics {
     for (var card : dbScoreCards) {
       var scorePersonal = card.getIdScorePersonal();
       var scoreGroup = card.getIdScoreGroup();
-      if (scorePersonal != null && scoreGroup != null && scorePersonal >= scoreGroup) {
+      if (scorePersonal != null && scoreGroup != null && scorePersonal <= scoreGroup) {
         result++;
       }
     }

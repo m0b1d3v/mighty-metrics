@@ -48,7 +48,7 @@
 						<td>
 							<span
 								th:if="${scorecard.idScorePersonal != null}"
-								th:text="*{scores[__${scorecard.idScorePersonal}__].value}"
+								th:text="*{scores[__${scorecard.idScorePersonal}__ - 1].value}"
 								th:remove="tag"
 							/>
 						</td>
