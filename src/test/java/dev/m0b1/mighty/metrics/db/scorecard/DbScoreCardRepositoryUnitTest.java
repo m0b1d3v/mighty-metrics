@@ -52,18 +52,21 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
 
     repository.read(uuid);
 
-    var expected = "SELECT " +
-        "id_coach, " +
-        "id_score_group, " +
-        "id_score_personal, " +
-        "uuid, " +
-        "local_date_time, " +
-        "workout_intensity, " +
-        "mighterium_collected, " +
-        "exercises " +
-      "FROM scorecard " +
-      "WHERE uuid = ? " +
-      "AND deleted IS NOT TRUE";
+    var expected = """
+      SELECT
+        id_coach,
+        id_score_group,
+        id_score_personal,
+        uuid,
+        date,
+        time,
+        workout_intensity,
+        mighterium_collected,
+        exercises
+      FROM scorecard
+      WHERE uuid = ?
+        AND deleted IS NOT TRUE
+      """;
 
     verify(jdbcTemplate).queryForObject(eq(expected), any(DbScoreCardMapper.class), eq(uuid));
   }
@@ -115,27 +118,33 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
   }
 
   private String getUpsertSql() {
-    return "INSERT INTO scorecard (" +
-      "id_member, " +
-      "id_coach, " +
-      "id_score_group, " +
-      "id_score_personal, " +
-      "uuid, " +
-      "local_date_time, " +
-      "workout_intensity, " +
-      "mighterium_collected, " +
-      "exercises" +
-      ") " +
-      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (uuid) DO UPDATE SET " +
-      "id_member = excluded.id_member, " +
-      "id_coach = excluded.id_coach, " +
-      "id_score_group = excluded.id_score_group, " +
-      "id_score_personal = excluded.id_score_personal, " +
-      "uuid = excluded.uuid, " +
-      "local_date_time = excluded.local_date_time, " +
-      "workout_intensity = excluded.workout_intensity, " +
-      "mighterium_collected = excluded.mighterium_collected, " +
-      "exercises = excluded.exercises";
+    return """
+      INSERT INTO scorecard (
+        id_member,
+        id_coach,
+        id_score_group,
+        id_score_personal,
+        uuid,
+        date,
+        time,
+        workout_intensity,
+        mighterium_collected,
+        exercises
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT (uuid)
+      DO UPDATE SET
+        id_member = excluded.id_member,
+        id_coach = excluded.id_coach,
+        id_score_group = excluded.id_score_group,
+        id_score_personal = excluded.id_score_personal,
+        uuid = excluded.uuid,
+        date = excluded.date,
+        time = excluded.time,
+        workout_intensity = excluded.workout_intensity,
+        mighterium_collected = excluded.mighterium_collected,
+        exercises = excluded.exercises
+      """;
   }
 
 }

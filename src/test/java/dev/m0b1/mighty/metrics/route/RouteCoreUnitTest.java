@@ -205,7 +205,7 @@ class RouteCoreUnitTest extends UnitTestBase {
   }
 
   private String postScoreCard() {
-    return route.postScoreCard(oAuth2User, dbScoreCard, bindingResult, model, httpServletRequest);
+    return route.postScoreCard(oAuth2User, null, dbScoreCard, bindingResult, model, httpServletRequest);
   }
 
 }

@@ -62,8 +62,16 @@ class DbMemberRepositoryUnitTest extends UnitTestBase {
 
     var result = repository.deniedScorecard(oAuth2User, uuid);
 
+    var expectedSql = """
+      SELECT COUNT(*)
+      FROM scorecard
+      WHERE uuid = ?
+        AND id_member = ?
+        AND deleted IS NOT TRUE
+      """;
+
     verify(jdbcTemplate).queryForObject(
-      "SELECT COUNT(*) FROM scorecard WHERE uuid = ? AND id_member = ? AND deleted IS NOT TRUE",
+      expectedSql,
       Long.class,
       uuid,
       1
@@ -77,15 +85,24 @@ class DbMemberRepositoryUnitTest extends UnitTestBase {
 
     repository.upsert(oAuth2User);
 
-    var expected = "INSERT INTO member (" +
-        "id, " +
-        "uuid, " +
-        "name" +
-      ") VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET " +
-        "name = excluded.name"
-      ;
+    var expected = """
+        INSERT INTO member (
+          id,
+          uuid,
+          name
+        )
+        VALUES (?, ?, ?)
+        ON CONFLICT (id)
+        DO UPDATE SET
+          name = excluded.name
+        """;
 
-    verify(jdbcTemplate).update(eq(expected), eq(1), any(UUID.class), eq(null));
+    verify(jdbcTemplate).update(
+      eq(expected),
+      eq(1),
+      any(UUID.class),
+      eq(null)
+    );
   }
 
 }

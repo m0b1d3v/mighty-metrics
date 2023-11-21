@@ -39,7 +39,17 @@ class DbUtilUnitTest extends UnitTestBase {
       "d"
     );
 
-    var expectedSql = "INSERT INTO c (a, b, c) VALUES (?, ?, ?) ON CONFLICT (d) DO UPDATE SET b = excluded.b";
+    var expectedSql = """
+      INSERT INTO c (
+        a,
+        b,
+        c
+      )
+      VALUES (?, ?, ?)
+      ON CONFLICT (d)
+      DO UPDATE SET
+        b = excluded.b
+      """;
 
     verify(jdbcTemplate).update(expectedSql, 1, 2L, "3");
   }

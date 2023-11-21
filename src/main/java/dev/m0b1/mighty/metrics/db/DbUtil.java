@@ -76,17 +76,16 @@ public final class DbUtil {
       .toList();
 
     var sql = STR."""
-      INSERT INTO \{table} (\{joinValues(columns)})
-      VALUES (\{joinValues(insertPlaceholders)})
+      INSERT INTO \{table} (
+        \{String.join(",\n  ", columns)}
+      )
+      VALUES (\{String.join(", ", insertPlaceholders)})
       ON CONFLICT (\{idColumn})
-      DO UPDATE SET \{joinValues(conflictUpdates)}
+      DO UPDATE SET
+        \{String.join(",\n  ", conflictUpdates)}
       """;
 
     jdbcTemplate.update(sql, values);
-  }
-
-  private static String joinValues(Collection<String> values) {
-    return String.join(", ", values);
   }
 
 }

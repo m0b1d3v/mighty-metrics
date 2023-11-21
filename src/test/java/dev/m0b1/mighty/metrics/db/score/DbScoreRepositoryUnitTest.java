@@ -23,8 +23,16 @@ class DbScoreRepositoryUnitTest extends UnitTestBase {
 
     repository.read();
 
+    var expectedSql = """
+      SELECT
+        id,
+        value
+      FROM score
+      ORDER BY id
+      """;
+
     verify(jdbcTemplate).query(
-      eq("SELECT id, value FROM score ORDER BY id"),
+      eq(expectedSql),
       any(DbScoreMapper.class)
     );
   }

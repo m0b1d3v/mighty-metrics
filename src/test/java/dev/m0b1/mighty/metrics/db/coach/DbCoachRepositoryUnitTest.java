@@ -23,8 +23,16 @@ class DbCoachRepositoryUnitTest extends UnitTestBase {
 
     repository.read();
 
+    var expectedSql = """
+      SELECT
+        id,
+        name
+      FROM coach
+      ORDER BY name
+      """;
+
     verify(jdbcTemplate).query(
-      eq("SELECT id, name FROM coach ORDER BY name"),
+      eq(expectedSql),
       any(DbCoachMapper.class)
     );
   }
