@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.PostConstruct;
+
+import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -101,7 +102,11 @@ public class DbMigration implements SmartInitializingSingleton {
       var resource = classLoader.getResource("migrations/" + migrationFilePath + ".sql");
 
       assert resource != null;
-      var path = Paths.get(resource.getPath());
+
+      var uri = resource.toURI();
+      var file = new File(uri);
+      var path = file.toPath();
+
       return Files.readString(path);
   }
 
