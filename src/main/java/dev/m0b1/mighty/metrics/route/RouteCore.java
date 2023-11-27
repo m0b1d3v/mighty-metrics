@@ -8,7 +8,6 @@ import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardRepository;
 import dev.m0b1.mighty.metrics.parser.ServiceImageParser;
-import dev.m0b1.mighty.metrics.parser.ServiceLogParser;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +34,7 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class RouteCore {
 
   public static final String PATH = "/core";
@@ -44,7 +44,6 @@ public class RouteCore {
   private final DbScoreCardRepository dbScoreCardRepository;
   private final DbScoreRepository dbScoreRepository;
   private final ServiceImageParser serviceImageParser;
-  private final ServiceLogParser serviceLogParser;
 
   private Tika tika;
 
@@ -90,10 +89,7 @@ public class RouteCore {
     throwIfDeniedScorecard(dbScoreCard, user);
 
     if (shouldReadScorecardImage(httpServletRequest, multipartFile)) {
-      // TODO
-      //   - Maintain uuid if already set
-      //   - Merge the parsed image only to score card fields not already set
-      // parseScorecard(dbScoreCard, multipartFile);
+      parseScorecard(dbScoreCard, multipartFile);
     }
 
     removeExerciseByIndexIfGiven(dbScoreCard, httpServletRequest);
@@ -114,6 +110,23 @@ public class RouteCore {
     }
 
     return result;
+  }
+
+  private void parseScorecard(DbScoreCard dbScoreCard, @Nonnull MultipartFile multipartFile) {
+
+    try (var inputStream = multipartFile.getInputStream()) {
+
+      var detectedFileType = tika.detect(inputStream);
+      if (detectedFileType != null && detectedFileType.contains("image")) {
+        serviceImageParser.run(dbScoreCard, multipartFile);
+      }
+
+    } catch (Exception e) {
+      log.atError()
+        .setMessage("Could not read uploaded file")
+        .setCause(e)
+        .log();
+    }
   }
 
   private void throwIfDeniedScorecard(DbScoreCard dbScoreCard, OAuth2User user) {
