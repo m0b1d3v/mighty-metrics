@@ -73,7 +73,6 @@ dependencies {
 	implementation('org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE')
 
 	// Front-end
-	implementation('org.webjars.npm:htmx.org:1.9.8')
 	implementation('org.webjars.npm:picocss__pico:1.5.10')
 
 	// Database
