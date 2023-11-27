@@ -7,6 +7,7 @@ import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
 import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardRepository;
+import dev.m0b1.mighty.metrics.parser.ServiceImageOcr;
 import dev.m0b1.mighty.metrics.parser.ServiceImageParser;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.PostConstruct;
@@ -43,6 +44,7 @@ public class RouteCore {
   private final DbMemberRepository dbMemberRepository;
   private final DbScoreCardRepository dbScoreCardRepository;
   private final DbScoreRepository dbScoreRepository;
+  private final ServiceImageOcr serviceImageOcr;
   private final ServiceImageParser serviceImageParser;
 
   private Tika tika;
@@ -118,7 +120,8 @@ public class RouteCore {
 
       var detectedFileType = tika.detect(inputStream);
       if (detectedFileType != null && detectedFileType.contains("image")) {
-        serviceImageParser.run(dbScoreCard, multipartFile);
+        var imageTexts = serviceImageOcr.run(multipartFile);
+        serviceImageParser.run(dbScoreCard, imageTexts);
       }
 
     } catch (Exception e) {
