@@ -2,6 +2,7 @@ package dev.m0b1.mighty.metrics.parser;
 
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @Service
 public class ServiceImageParser {
+
+  private static final String PATTERN_SCORE = "([A-Z]\\s?\\+?)";
 
   /**
    * Read a processed image into a sorted map of strings with relevant top-left origin points first.
@@ -64,29 +67,32 @@ public class ServiceImageParser {
 
   private String parseGroupAverage(String scorecardVersion, List<ImageText> imageTexts) {
 
-    var scorePattern = "([A-Z]\\+?)";
+    String result;
 
     double yPosition;
     if (isVersion1(scorecardVersion)) {
       yPosition = 0.16016;
+    } else if (isVersion2_0(scorecardVersion)) {
+      yPosition = 0.13021;
     } else {
       yPosition = 0.20703;
     }
 
-    var regex = STR."^\{scorePattern}";
-    return findByNormalizedPosition(imageTexts, yPosition)
+    var regex = STR."^\{PATTERN_SCORE}";
+    result = findByNormalizedPosition(imageTexts, yPosition)
       .map(text -> findMatchingGroup(text.getValue(), regex, 1))
       .orElse(null);
+
+    return formatScore(result);
   }
 
   private String parsePersonalAverage(String scorecardVersion, List<ImageText> imageTexts) {
 
     String result;
-    var scorePattern = "([A-Z]\\+?)";
 
     if (isVersion1(scorecardVersion)) {
 
-      var regex = STR."^PERSONAL \{scorePattern}";
+      var regex = STR."^PERSONAL \{PATTERN_SCORE}";
 
       return imageTexts
         .stream()
@@ -97,14 +103,21 @@ public class ServiceImageParser {
 
     } else {
 
-      var regex = STR."^\{scorePattern}\\s*\{scorePattern}";
+      var regex = STR."^\{PATTERN_SCORE}\\s*\{PATTERN_SCORE}";
 
-      result = findByNormalizedPosition(imageTexts, 0.20703)
+      double yPosition;
+      if (isVersion2_0(scorecardVersion)) {
+        yPosition = 0.13021;
+      } else {
+        yPosition = 0.20703;
+      }
+
+      result = findByNormalizedPosition(imageTexts, yPosition)
         .map(text -> findMatchingGroup(text.getValue(), regex, 2))
         .orElse(null);
     }
 
-    return result;
+    return formatScore(result);
   }
 
   private String parseWorkoutIntensity(String scorecardVersion, List<ImageText> imageTexts) {
@@ -117,8 +130,14 @@ public class ServiceImageParser {
       regex = STR."^INTENSITY\\s*\{intensityPattern}";
       yPosition = 0.28125;
     } else {
+
       regex = STR."^\{intensityPattern}";
-      yPosition = 0.21875;
+
+      if (isVersion2_0(scorecardVersion)) {
+        yPosition = 0.14063;
+      } else {
+        yPosition = 0.21875;
+      }
     }
 
     return findByNormalizedPosition(imageTexts, yPosition)
@@ -131,6 +150,8 @@ public class ServiceImageParser {
     double yPosition;
     if (isVersion1(scorecardVersion)) {
       yPosition = 0.09766;
+    } else if (isVersion2_0(scorecardVersion)) {
+      yPosition = 0.08333;
     } else {
       yPosition = 0.13672;
     }
@@ -145,6 +166,8 @@ public class ServiceImageParser {
     double yPosition;
     if (isVersion1(scorecardVersion)) {
       yPosition = 0.09766;
+    } else if (isVersion2_0(scorecardVersion)) {
+      yPosition = 0.08333;
     } else {
       yPosition = 0.14453;
     }
@@ -159,7 +182,15 @@ public class ServiceImageParser {
     String result = null;
 
     if ( ! isVersion1(scorecardVersion)) {
-      result = findByNormalizedPosition(imageTexts, 0.25781)
+
+      double yPosition;
+      if (isVersion2_0(scorecardVersion)) {
+        yPosition = 0.18229;
+      } else {
+        yPosition = 0.25781;
+      }
+
+      result = findByNormalizedPosition(imageTexts, yPosition)
         .map(ImageText::getValue)
         .orElse(null);
     }
@@ -190,6 +221,10 @@ public class ServiceImageParser {
     result.replaceAll(this::formatExercise);
 
     return result;
+  }
+
+  private String formatScore(String score) {
+    return RegExUtils.replaceAll(score, "\\s", "");
   }
 
   private String formatExercise(String exercise) {
@@ -247,6 +282,10 @@ public class ServiceImageParser {
 
   private boolean isVersion2(String scorecardVersion) {
     return StringUtils.startsWith(scorecardVersion, "2.");
+  }
+
+  private boolean isVersion2_0(String scorecardVersion) {
+    return StringUtils.contains(scorecardVersion, "2.0");
   }
 
 }
