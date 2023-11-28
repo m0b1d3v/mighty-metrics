@@ -4,6 +4,8 @@ import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -22,41 +24,45 @@ public class ServiceImageParser {
    */
   public void run(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
-    var scorecardVersion = parseVersion(imageTexts);
+    parseVersion(dbScoreCard, imageTexts);
 
-    if (isVersion2(scorecardVersion)) {
+    if (isVersion2(dbScoreCard)) {
       imageTexts.removeIf(imageText -> StringUtils.endsWithAny(imageText.getValue(), "Generalised Tracking", " Workout"));
     }
 
-    var coach = parseCoach(scorecardVersion, imageTexts);
-    var groupAverage = parseGroupAverage(scorecardVersion, imageTexts);
-    var personalAverage = parsePersonalAverage(scorecardVersion, imageTexts);
-    var workoutIntensity = parseWorkoutIntensity(scorecardVersion, imageTexts);
-    var localDate = parseLocalDate(scorecardVersion, imageTexts);
-    var localTime = parseLocalTime(scorecardVersion, imageTexts);
-    var mighterium = parseMighterium(scorecardVersion, imageTexts);
-    var exercises = parseExercises(scorecardVersion, imageTexts);
+    var coach = parseCoach(dbScoreCard, imageTexts);
+    var groupAverage = parseGroupAverage(dbScoreCard, imageTexts);
+    var personalAverage = parsePersonalAverage(dbScoreCard, imageTexts);
+    var workoutIntensity = parseWorkoutIntensity(dbScoreCard, imageTexts);
+    var localDate = parseLocalDate(dbScoreCard, imageTexts);
+    var localTime = parseLocalTime(dbScoreCard, imageTexts);
+    var mighterium = parseMighterium(dbScoreCard, imageTexts);
+    var exercises = parseExercises(dbScoreCard, imageTexts);
 
     var breakpoint = 1;
   }
 
-  private String parseVersion(List<ImageText> imageTexts) {
+  private void parseVersion(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     var keywords = "The Mighty Gym v";
 
-    return imageTexts
+    var string = imageTexts
       .stream()
       .filter(text -> text.getValue().contains(keywords))
       .findFirst()
       .map(text -> StringUtils.substringAfter(text.getValue(), keywords))
       .orElse(null);
+
+    var result = NumberUtils.createDouble(string);
+
+    dbScoreCard.setVersion(result);
   }
 
-  private String parseCoach(String scorecardVersion, List<ImageText> imageTexts) {
+  private String parseCoach(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     String result = null;
 
-    if ( ! isVersion1(scorecardVersion)) {
+    if ( ! isVersion1(dbScoreCard)) {
       result = findByNormalizedPosition(imageTexts, 0.17188)
         .map(text -> StringUtils.substringAfter(text.getValue(), "Operator : "))
         .orElse(null);
@@ -65,14 +71,14 @@ public class ServiceImageParser {
     return result;
   }
 
-  private String parseGroupAverage(String scorecardVersion, List<ImageText> imageTexts) {
+  private String parseGroupAverage(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     String result;
 
     double yPosition;
-    if (isVersion1(scorecardVersion)) {
+    if (isVersion1(dbScoreCard)) {
       yPosition = 0.16016;
-    } else if (isVersion2_0(scorecardVersion)) {
+    } else if (isVersion2_0(dbScoreCard)) {
       yPosition = 0.13021;
     } else {
       yPosition = 0.20703;
@@ -86,11 +92,11 @@ public class ServiceImageParser {
     return formatScore(result);
   }
 
-  private String parsePersonalAverage(String scorecardVersion, List<ImageText> imageTexts) {
+  private String parsePersonalAverage(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     String result;
 
-    if (isVersion1(scorecardVersion)) {
+    if (isVersion1(dbScoreCard)) {
 
       var regex = STR."^PERSONAL \{PATTERN_SCORE}";
 
@@ -106,7 +112,7 @@ public class ServiceImageParser {
       var regex = STR."^\{PATTERN_SCORE}\\s*\{PATTERN_SCORE}";
 
       double yPosition;
-      if (isVersion2_0(scorecardVersion)) {
+      if (isVersion2_0(dbScoreCard)) {
         yPosition = 0.13021;
       } else {
         yPosition = 0.20703;
@@ -120,20 +126,20 @@ public class ServiceImageParser {
     return formatScore(result);
   }
 
-  private String parseWorkoutIntensity(String scorecardVersion, List<ImageText> imageTexts) {
+  private String parseWorkoutIntensity(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     var intensityPattern = "(\\d+)";
 
     String regex;
     double yPosition;
-    if (isVersion1(scorecardVersion)) {
+    if (isVersion1(dbScoreCard)) {
       regex = STR."^INTENSITY\\s*\{intensityPattern}";
       yPosition = 0.28125;
     } else {
 
       regex = STR."^\{intensityPattern}";
 
-      if (isVersion2_0(scorecardVersion)) {
+      if (isVersion2_0(dbScoreCard)) {
         yPosition = 0.14063;
       } else {
         yPosition = 0.21875;
@@ -145,12 +151,12 @@ public class ServiceImageParser {
       .orElse(null);
   }
 
-  private String parseLocalDate(String scorecardVersion, List<ImageText> imageTexts) {
+  private String parseLocalDate(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     double yPosition;
-    if (isVersion1(scorecardVersion)) {
+    if (isVersion1(dbScoreCard)) {
       yPosition = 0.09766;
-    } else if (isVersion2_0(scorecardVersion)) {
+    } else if (isVersion2_0(dbScoreCard)) {
       yPosition = 0.08333;
     } else {
       yPosition = 0.13672;
@@ -161,12 +167,12 @@ public class ServiceImageParser {
       .orElse(null);
   }
 
-  private String parseLocalTime(String scorecardVersion, List<ImageText> imageTexts) {
+  private String parseLocalTime(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     double yPosition;
-    if (isVersion1(scorecardVersion)) {
+    if (isVersion1(dbScoreCard)) {
       yPosition = 0.09766;
-    } else if (isVersion2_0(scorecardVersion)) {
+    } else if (isVersion2_0(dbScoreCard)) {
       yPosition = 0.08333;
     } else {
       yPosition = 0.14453;
@@ -177,14 +183,14 @@ public class ServiceImageParser {
       .orElse(null);
   }
 
-  private String parseMighterium(String scorecardVersion, List<ImageText> imageTexts) {
+  private String parseMighterium(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     String result = null;
 
-    if ( ! isVersion1(scorecardVersion)) {
+    if ( ! isVersion1(dbScoreCard)) {
 
       double yPosition;
-      if (isVersion2_0(scorecardVersion)) {
+      if (isVersion2_0(dbScoreCard)) {
         yPosition = 0.18229;
       } else {
         yPosition = 0.25781;
@@ -198,12 +204,12 @@ public class ServiceImageParser {
     return result;
   }
 
-  private List<String> parseExercises(String scorecardVersion, List<ImageText> imageTexts) {
+  private List<String> parseExercises(DbScoreCard dbScoreCard, List<ImageText> imageTexts) {
 
     var result = new LinkedList<String>();
 
     double yCutoff;
-    if (isVersion1(scorecardVersion)) {
+    if (isVersion1(dbScoreCard)) {
       yCutoff = 0.66400;
     } else {
       yCutoff = 0.66406;
@@ -276,16 +282,16 @@ public class ServiceImageParser {
       .findFirst();
   }
 
-  private boolean isVersion1(String scorecardVersion) {
-    return StringUtils.startsWith(scorecardVersion, "1.");
+  private boolean isVersion1(DbScoreCard dbScoreCard) {
+    return dbScoreCard.getVersion() != null && dbScoreCard.getVersion() < 2;
   }
 
-  private boolean isVersion2(String scorecardVersion) {
-    return StringUtils.startsWith(scorecardVersion, "2.");
+  private boolean isVersion2(DbScoreCard dbScoreCard) {
+    return dbScoreCard.getVersion() != null && dbScoreCard.getVersion() >= 2;
   }
 
-  private boolean isVersion2_0(String scorecardVersion) {
-    return StringUtils.contains(scorecardVersion, "2.0");
+  private boolean isVersion2_0(DbScoreCard dbScoreCard) {
+    return dbScoreCard.getVersion() != null && Precision.equals(dbScoreCard.getVersion(), 2);
   }
 
 }

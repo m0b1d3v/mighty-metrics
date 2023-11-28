@@ -70,4 +70,6 @@ public class DbScoreCard {
   @Valid
   private List<DbScoreCardExercise> exercises = new LinkedList<>();
 
+  private Double version;
+
 }
