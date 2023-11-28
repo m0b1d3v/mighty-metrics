@@ -19,7 +19,8 @@ public class AuthConfiguration {
     "/webjars/**",
     "/*.png",
     "/*.ico",
-    "/*.css"
+    "/*.css",
+    "/*.js"
   };
 
   @Bean
