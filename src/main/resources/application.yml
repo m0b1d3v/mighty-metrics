@@ -27,6 +27,7 @@ spring:
   session:
     jdbc:
       initialize-schema: always
+    timeout: 7d
   servlet:
     multipart:
       max-file-size: 10MB
