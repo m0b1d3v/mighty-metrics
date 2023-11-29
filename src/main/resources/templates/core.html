@@ -33,7 +33,7 @@
 
 				</div>
 
-				<div th:if="${scorecard.imageTitle == null}">
+				<div th:hidden="${scorecard.imageTitle != null}">
 
 					<h4>
 						<label for="file" id="fileLabel">Upload scorecard image for scanning</label>
