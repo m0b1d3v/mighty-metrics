@@ -16,9 +16,7 @@ public class ServiceStatistics {
 
     var result = new LinkedList<String>();
 
-    if (dbScoreCards == null || dbScoreCards.isEmpty()) {
-      result.add("No statistics yet, go do some arm circles!");
-    } else {
+    if (dbScoreCards != null && ! dbScoreCards.isEmpty()) {
       totalWorkouts(result, dbScoreCards);
       score(result, dbScoreCards);
       workoutIntensity(result, dbScoreCards);

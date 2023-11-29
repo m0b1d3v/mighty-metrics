@@ -14,52 +14,72 @@
 
 			<hr>
 
-			<h4>
-				Core Analysis Results
-			</h4>
+			<div>
 
-			<ul>
-				<li
-					th:each="statistic : *{statistics}"
-					th:text="${statistic}"
-				/>
-			</ul>
+				<h4>
+					Core Analysis Results
+				</h4>
+
+				<ul>
+
+					<li th:if="${statistics.isEmpty()}">
+						No statistics yet, certain scorecards will unlock more
+					</li>
+
+					<li
+						th:each="statistic : *{statistics}"
+						th:text="${statistic}"
+					/>
+				</ul>
+
+			</div>
 
 			<hr>
 
-			<h5>
-				Scorecard history
-			</h5>
+			<div>
 
-			<table role="grid">
+				<h5>
+					Scorecard history
+				</h5>
 
-				<thead>
-					<tr>
-						<th>Number</th>
-						<th>Score</th>
-						<th>Date</th>
-						<th>Details</th>
-					</tr>
-				</thead>
+				<table role="grid">
 
-				<tbody>
-					<tr th:each="scorecard, stat : *{scorecards}">
-						<td th:text="${stat.size - stat.count + 1}"></td>
-						<td>
-							<span
-								th:if="${scorecard.idScorePersonal != null}"
-								th:text="*{scores[__${scorecard.idScorePersonal}__ - 1].value}"
-								th:remove="tag"
-							/>
-						</td>
-						<td th:text="${#temporals.format(scorecard.date, 'YYYY-MM-dd')}"/>
-						<td>
-							<a th:href="'/core/' + ${scorecard.uuid}">&rArr;</a>
-						</td>
-					</tr>
-				</tbody>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Score</th>
+							<th>Date</th>
+							<th>Details</th>
+						</tr>
+					</thead>
 
-			</table>
+					<tbody>
+
+						<tr th:if="${scorecards.isEmpty()}">
+							<td colspan="4">
+								Save some scorecards for history to appear
+							</td>
+						</tr>
+
+						<tr th:each="scorecard, stat : *{scorecards}">
+							<td th:text="${stat.size - stat.count + 1}"></td>
+							<td>
+								<span
+									th:if="${scorecard.idScorePersonal != null}"
+									th:text="*{scores[__${scorecard.idScorePersonal}__ - 1].value}"
+									th:remove="tag"
+								/>
+							</td>
+							<td th:text="${#temporals.format(scorecard.date, 'YYYY-MM-dd')}"/>
+							<td>
+								<a th:href="'/core/' + ${scorecard.uuid}">&rArr;</a>
+							</td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
 
 		</main>
 	</body>
