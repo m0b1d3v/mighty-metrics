@@ -33,6 +33,7 @@ public class AuthConfiguration {
       .csrf(c -> c.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
       .logout(l -> l.logoutSuccessUrl("/").permitAll())
       .oauth2Login(Customizer.withDefaults())
+      .sessionManagement(s -> s.maximumSessions(1))
       .build();
   }
 
