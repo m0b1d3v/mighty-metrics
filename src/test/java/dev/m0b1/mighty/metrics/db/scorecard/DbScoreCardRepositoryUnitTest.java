@@ -50,7 +50,7 @@ class DbScoreCardRepositoryUnitTest extends UnitTestBase {
   @Test
   void read() {
 
-    repository.read(uuid);
+    repository.readData(uuid);
 
     var expected = """
       SELECT

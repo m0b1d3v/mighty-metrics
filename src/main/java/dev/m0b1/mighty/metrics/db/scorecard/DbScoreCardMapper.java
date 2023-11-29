@@ -24,7 +24,12 @@ public class DbScoreCardMapper implements RowMapper<DbScoreCard> {
     scoreCard.setIdCoach(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_ID_COACH, Integer.class));
     scoreCard.setIdScoreGroup(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_ID_SCORE_GROUP, Integer.class));
     scoreCard.setIdScorePersonal(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_ID_SCORE_PERSONAL, Integer.class));
-    scoreCard.setUuid(UUID.fromString(resultSet.getString(DbScoreCard.COLUMN_UUID)));
+
+    var uuid = DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_UUID, String.class);
+    if (uuid != null) {
+      scoreCard.setUuid(UUID.fromString(uuid));
+    }
+
     scoreCard.setWorkoutIntensity(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_WORKOUT_INTENSITY, Integer.class));
     scoreCard.setMighteriumCollected(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED, Integer.class));
 
@@ -44,6 +49,9 @@ public class DbScoreCardMapper implements RowMapper<DbScoreCard> {
     if (exercises != null) {
       scoreCard.getExercises().addAll(exercises);
     }
+
+    scoreCard.setImageTitle(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_IMAGE_TITLE, String.class));
+    scoreCard.setImageBytes(DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_IMAGE_BYTES, byte[].class));
 
     return scoreCard;
   }

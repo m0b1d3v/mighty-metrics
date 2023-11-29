@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS scorecard (
 	workout_intensity INTEGER,
 	mighterium_collected INTEGER,
 	exercises TEXT,
+	image_title TEXT,
+	image_bytes BLOB,
 	FOREIGN KEY (id_member) REFERENCES member (id),
 	FOREIGN KEY (id_coach) REFERENCES coach (id),
 	FOREIGN KEY (id_score_group) REFERENCES score (id),

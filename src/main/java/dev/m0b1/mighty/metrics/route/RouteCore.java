@@ -11,7 +11,10 @@ import dev.m0b1.mighty.metrics.parser.ServiceScorecardProcessor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -57,9 +60,21 @@ public class RouteCore {
 
     throwIfDeniedScorecard(uuid, user);
 
-    var dbScoreCard = dbScoreCardRepository.read(uuid);
+    var dbScoreCard = dbScoreCardRepository.readData(uuid);
     addModelAttributes(dbScoreCard, model);
     return "core";
+  }
+
+  @GetMapping(value = PATH + "/{uuid}/scorecard", produces = MediaType.IMAGE_PNG_VALUE)
+  public ResponseEntity<byte[]> getScoreCardImage(
+    @AuthenticationPrincipal OAuth2User user,
+    @PathVariable UUID uuid
+  ) {
+
+    throwIfDeniedScorecard(uuid, user);
+
+    var dbScoreCard = dbScoreCardRepository.readImage(uuid);
+    return new ResponseEntity<>(dbScoreCard.getImageBytes(), new HttpHeaders(), HttpStatus.OK);
   }
 
   @PostMapping(PATH)
@@ -92,7 +107,8 @@ public class RouteCore {
       result = STR."redirect:\{PATH}";
     } else {
       dbScoreCard = dbScoreCardRepository.upsert(dbScoreCard);
-      result = STR."redirect:\{PATH}/\{dbScoreCard.getUuid()}";
+      var redirectId = dbScoreCard.getUuid();
+      result = STR."redirect:\{PATH}/\{redirectId}";
     }
 
     return result;

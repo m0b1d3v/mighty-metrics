@@ -33,19 +33,34 @@
 
 				</div>
 
-				<label for="file">Upload scorecard image for automated form entry</label>
-				<input
-					accept="image/jpeg,image/png"
-					id="file"
-					name="file"
-					type="file"
-				>
+				<div th:if="${scorecard.imageTitle == null}">
 
-				<input
-					name="image"
-					type="submit"
-					value="Upload Image"
-				/>
+					<h4>
+						<label for="file" id="fileLabel">Upload scorecard image for scanning</label>
+					</h4>
+					<input
+						aria-busy="true"
+						accept="image/jpeg,image/png"
+						id="file"
+						name="file"
+						type="file"
+					>
+
+					<input
+						id="image"
+						name="image"
+						type="submit"
+						value="Upload"
+					/>
+
+				</div>
+
+				<figure th:if="${scorecard.imageTitle != null}">
+					<img
+						th:alt="${scorecard.imageTitle}"
+						th:src="'/core/' + ${scorecard.uuid} + '/scorecard'"
+					>
+				</figure>
 
 				<hr>
 

@@ -32,7 +32,9 @@ public class DbScoreCardRepository {
         \{DbScoreCard.COLUMN_DATE},
         \{DbScoreCard.COLUMN_TIME},
         \{DbScoreCard.COLUMN_WORKOUT_INTENSITY},
-        \{DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED}
+        \{DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED},
+        \{DbScoreCard.COLUMN_IMAGE_TITLE},
+        \{DbScoreCard.COLUMN_IMAGE_BYTES}
       FROM \{DbScoreCard.TABLE}
       WHERE \{DbScoreCard.COLUMN_ID_MEMBER} = ?
         AND \{DbScoreCard.COLUMN_DELETED} IS NOT TRUE
@@ -42,7 +44,7 @@ public class DbScoreCardRepository {
     return jdbcTemplate.query(sql, MAPPER, idMember);
   }
 
-  public DbScoreCard read(UUID uuid) {
+  public DbScoreCard readData(UUID uuid) {
 
     var sql = STR."""
       SELECT
@@ -54,7 +56,21 @@ public class DbScoreCardRepository {
         \{DbScoreCard.COLUMN_TIME},
         \{DbScoreCard.COLUMN_WORKOUT_INTENSITY},
         \{DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED},
-        \{DbScoreCard.COLUMN_EXERCISES}
+        \{DbScoreCard.COLUMN_EXERCISES},
+        \{DbScoreCard.COLUMN_IMAGE_TITLE}
+      FROM \{DbScoreCard.TABLE}
+      WHERE \{DbScoreCard.COLUMN_UUID} = ?
+        AND \{DbScoreCard.COLUMN_DELETED} IS NOT TRUE
+      """;
+
+    return jdbcTemplate.queryForObject(sql, MAPPER, uuid);
+  }
+
+  public DbScoreCard readImage(UUID uuid) {
+
+    var sql = STR."""
+      SELECT
+        \{DbScoreCard.COLUMN_IMAGE_BYTES}
       FROM \{DbScoreCard.TABLE}
       WHERE \{DbScoreCard.COLUMN_UUID} = ?
         AND \{DbScoreCard.COLUMN_DELETED} IS NOT TRUE
@@ -82,6 +98,8 @@ public class DbScoreCardRepository {
     inputMap.put(DbScoreCard.COLUMN_WORKOUT_INTENSITY, dbScoreCard.getWorkoutIntensity());
     inputMap.put(DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED, dbScoreCard.getMighteriumCollected());
     inputMap.put(DbScoreCard.COLUMN_EXERCISES, exercisesJson);
+    inputMap.put(DbScoreCard.COLUMN_IMAGE_TITLE, dbScoreCard.getImageTitle());
+    inputMap.put(DbScoreCard.COLUMN_IMAGE_BYTES, dbScoreCard.getImageBytes());
 
     DbUtil.upsert(
       jdbcTemplate,

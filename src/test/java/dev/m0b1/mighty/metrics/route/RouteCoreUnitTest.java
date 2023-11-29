@@ -100,7 +100,7 @@ class RouteCoreUnitTest extends UnitTestBase {
 
     var ex = assertThrows(ResponseStatusException.class, () -> route.getScoreCard(oAuth2User, uuid, model));
 
-    verify(dbScoreCardRepository, never()).read(uuid);
+    verify(dbScoreCardRepository, never()).readData(uuid);
 
     assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
     assertEquals("Scorecard not found.", ex.getReason());
@@ -110,11 +110,11 @@ class RouteCoreUnitTest extends UnitTestBase {
   void getScoreCard_allowed() {
 
     when(dbMemberRepository.deniedScorecard(oAuth2User, uuid)).thenReturn(false);
-    when(dbScoreCardRepository.read(uuid)).thenReturn(dbScoreCard);
+    when(dbScoreCardRepository.readData(uuid)).thenReturn(dbScoreCard);
 
     var result = route.getScoreCard(oAuth2User, uuid, model);
 
-    verify(dbScoreCardRepository).read(uuid);
+    verify(dbScoreCardRepository).readData(uuid);
     verifyModelAttributes(dbScoreCard);
 
     assertEquals("core", result);
@@ -170,7 +170,7 @@ class RouteCoreUnitTest extends UnitTestBase {
     var result = postScoreCard();
     verifyModelAttributes(dbScoreCard);
     verify(dbScoreCardRepository, never()).upsert(dbScoreCard);
-    assertEquals("core", result);
+    assertEquals("/core", result);
   }
 
   @Test
