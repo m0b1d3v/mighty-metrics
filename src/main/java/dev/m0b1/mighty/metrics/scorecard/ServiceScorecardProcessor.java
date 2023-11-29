@@ -1,4 +1,4 @@
-package dev.m0b1.mighty.metrics.parser;
+package dev.m0b1.mighty.metrics.scorecard;
 
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import jakarta.annotation.Nonnull;

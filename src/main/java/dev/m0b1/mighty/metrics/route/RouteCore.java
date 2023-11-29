@@ -7,7 +7,7 @@ import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
 import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardRepository;
-import dev.m0b1.mighty.metrics.parser.ServiceScorecardProcessor;
+import dev.m0b1.mighty.metrics.scorecard.ServiceScorecardProcessor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

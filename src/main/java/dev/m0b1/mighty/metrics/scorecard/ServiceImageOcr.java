@@ -1,4 +1,4 @@
-package dev.m0b1.mighty.metrics.parser;
+package dev.m0b1.mighty.metrics.scorecard;
 
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;

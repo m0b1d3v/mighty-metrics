@@ -1,4 +1,4 @@
-package dev.m0b1.mighty.metrics.parser;
+package dev.m0b1.mighty.metrics.scorecard;
 
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import lombok.RequiredArgsConstructor;
@@ -81,7 +81,7 @@ public class ServiceImageParser {
     } else if (isVersion2_0(dbScoreCard)) {
       yPosition = 0.13021;
     } else {
-      yPosition = 0.20703;
+      yPosition = 0.20313;
     }
 
     var regex = STR."^\{PATTERN_SCORE}";
@@ -115,7 +115,7 @@ public class ServiceImageParser {
       if (isVersion2_0(dbScoreCard)) {
         yPosition = 0.13021;
       } else {
-        yPosition = 0.20703;
+        yPosition = 0.20313;
       }
 
       result = findByNormalizedPosition(imageTexts, yPosition)
@@ -142,7 +142,7 @@ public class ServiceImageParser {
       if (isVersion2_0(dbScoreCard)) {
         yPosition = 0.14063;
       } else {
-        yPosition = 0.21875;
+        yPosition = 0.21484;
       }
     }
 
@@ -159,7 +159,7 @@ public class ServiceImageParser {
     } else if (isVersion2_0(dbScoreCard)) {
       yPosition = 0.08333;
     } else {
-      yPosition = 0.13672;
+      yPosition = 0.13281;
     }
 
     return findByNormalizedPosition(imageTexts, yPosition)
@@ -175,7 +175,7 @@ public class ServiceImageParser {
     } else if (isVersion2_0(dbScoreCard)) {
       yPosition = 0.08333;
     } else {
-      yPosition = 0.14453;
+      yPosition = 0.14844;
     }
 
     return findByNormalizedPosition(imageTexts, yPosition)
