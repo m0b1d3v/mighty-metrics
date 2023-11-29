@@ -31,6 +31,8 @@ public class DbScoreCard {
   public static final String COLUMN_WORKOUT_INTENSITY = "workout_intensity";
   public static final String COLUMN_MIGHTERIUM_COLLECTED = "mighterium_collected";
   public static final String COLUMN_EXERCISES = "exercises";
+  public static final String COLUMN_IMAGE_TITLE = "image_title";
+  public static final String COLUMN_IMAGE_BYTES = "image_bytes";
 
   @JsonIgnore
   private Long id;
@@ -69,6 +71,10 @@ public class DbScoreCard {
   @Size(max = 50, message = "Number of exercises cannot be higher than {value}")
   @Valid
   private List<DbScoreCardExercise> exercises = new LinkedList<>();
+
+  private String imageTitle;
+
+  private byte[] imageBytes;
 
   private Double version;
 

@@ -1,13 +1,17 @@
 package dev.m0b1.mighty.metrics.parser;
 
-import com.google.cloud.vision.v1.*;
+import com.google.cloud.vision.v1.AnnotateImageRequest;
+import com.google.cloud.vision.v1.AnnotateImageResponse;
+import com.google.cloud.vision.v1.BoundingPoly;
+import com.google.cloud.vision.v1.Feature;
+import com.google.cloud.vision.v1.Image;
+import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Precision;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,8 +19,6 @@ import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-
-import static net.logstash.logback.marker.Markers.append;
 
 /**
  * Logic that should be run for any scorecard regardless of version.
@@ -34,10 +36,9 @@ public class ServiceImageOcr {
   /**
    * Read a processed image into a sorted map of strings with relevant top-left origin points first.
    */
-  public List<ImageText> run(MultipartFile multipartFile) {
+  public List<ImageText> run(byte[] bytes) {
 
-    var annotateImageResponse = fetchGoogleImageAnnotations(multipartFile);
-
+    var annotateImageResponse = fetchGoogleImageAnnotations(bytes);
     var imageTexts = read(annotateImageResponse);
 
     imageTextCleanup(imageTexts);
@@ -52,13 +53,12 @@ public class ServiceImageOcr {
   /**
    * Send out an image to Google for them to run text detection.
    */
-  private AnnotateImageResponse fetchGoogleImageAnnotations(MultipartFile multipartFile) {
+  private AnnotateImageResponse fetchGoogleImageAnnotations(byte[] bytes) {
 
     AnnotateImageResponse result = null;
 
     try (var imageAnnotatorClient = ImageAnnotatorClient.create()) {
 
-      var bytes = multipartFile.getBytes();
       var byteString = ByteString.copyFrom(bytes);
       var image = Image.newBuilder().setContent(byteString).build();
 
@@ -78,7 +78,6 @@ public class ServiceImageOcr {
       log.atError()
         .setMessage("Could not fetch Google image annotations")
         .setCause(e)
-        .addMarker(append("originalFileName", multipartFile.getOriginalFilename()))
         .log();
     }
 

@@ -7,15 +7,10 @@ import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
 import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardRepository;
-import dev.m0b1.mighty.metrics.parser.ServiceImageOcr;
-import dev.m0b1.mighty.metrics.parser.ServiceImageParser;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.PostConstruct;
+import dev.m0b1.mighty.metrics.parser.ServiceScorecardProcessor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.tika.Tika;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,7 +30,6 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-@Slf4j
 public class RouteCore {
 
   public static final String PATH = "/core";
@@ -44,15 +38,7 @@ public class RouteCore {
   private final DbMemberRepository dbMemberRepository;
   private final DbScoreCardRepository dbScoreCardRepository;
   private final DbScoreRepository dbScoreRepository;
-  private final ServiceImageOcr serviceImageOcr;
-  private final ServiceImageParser serviceImageParser;
-
-  private Tika tika;
-
-  @PostConstruct
-  private void postConstruct() {
-    tika = new Tika();
-  }
+  private final ServiceScorecardProcessor serviceScorecardProcessor;
 
   @GetMapping(PATH)
   public String getCore(Model model) {
@@ -69,9 +55,7 @@ public class RouteCore {
     Model model
   ) {
 
-    if (dbMemberRepository.deniedScorecard(user, uuid)) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scorecard not found.");
-    }
+    throwIfDeniedScorecard(uuid, user);
 
     var dbScoreCard = dbScoreCardRepository.read(uuid);
     addModelAttributes(dbScoreCard, model);
@@ -91,7 +75,7 @@ public class RouteCore {
     throwIfDeniedScorecard(dbScoreCard, user);
 
     if (shouldReadScorecardImage(httpServletRequest, multipartFile)) {
-      parseScorecard(dbScoreCard, multipartFile);
+      serviceScorecardProcessor.run(dbScoreCard, multipartFile);
     }
 
     removeExerciseByIndexIfGiven(dbScoreCard, httpServletRequest);
@@ -114,28 +98,16 @@ public class RouteCore {
     return result;
   }
 
-  private void parseScorecard(DbScoreCard dbScoreCard, @Nonnull MultipartFile multipartFile) {
-
-    try (var inputStream = multipartFile.getInputStream()) {
-
-      var detectedFileType = tika.detect(inputStream);
-      if (detectedFileType != null && detectedFileType.contains("image")) {
-        var imageTexts = serviceImageOcr.run(multipartFile);
-        serviceImageParser.run(dbScoreCard, imageTexts);
-      }
-
-    } catch (Exception e) {
-      log.atError()
-        .setMessage("Could not read uploaded file")
-        .setCause(e)
-        .log();
+  private void throwIfDeniedScorecard(UUID uuid, OAuth2User user) {
+    if (dbMemberRepository.deniedScorecard(user, uuid)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scorecard not found.");
     }
   }
 
   private void throwIfDeniedScorecard(DbScoreCard dbScoreCard, OAuth2User user) {
     var uuid = dbScoreCard.getUuid();
     if (uuid != null && dbMemberRepository.deniedScorecard(user, uuid)) {
-      throw new AccessDeniedException("Scorecard update denied.");
+      throw new AccessDeniedException("Access denied.");
     }
   }
 
