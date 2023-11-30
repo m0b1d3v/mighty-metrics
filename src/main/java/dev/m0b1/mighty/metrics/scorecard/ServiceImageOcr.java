@@ -30,8 +30,6 @@ import java.util.List;
 public class ServiceImageOcr {
 
   private static final double Y_HEIGHT_DIFFERENCE_CONSIDERED_FOR_SAME_LINE = 0.005;
-  private static final double Y_HEIGHT_START_FOR_EXERCISE_BLOCK = 0.3125;
-  private static final double Y_HEIGHT_END_FOR_EXERCISE_BLOCK = 0.66406;
 
   /**
    * Read a processed image into a sorted map of strings with relevant top-left origin points first.
@@ -113,7 +111,7 @@ public class ServiceImageOcr {
   /**
    * Given a bounding box for some text in an image determine the top-left point rounded to the nearest ten pixels.
    *
-   * We then normalize it to a [0, 1] bound so that comparisons are size agnostic, only orientation gnostic.
+   * We then normalize it to a [0, 1] bound so that comparisons are size agnostic.
    * This rounding lets us more accurately measure text on the same "line" while accounting for character differences.
    */
   private ImageText determineImageTextPosition(BoundingPoly boundingPoly, int imageWidth, int imageHeight) {
@@ -186,7 +184,6 @@ public class ServiceImageOcr {
    *
    * Takes special care for image texts that occur in exercise blocks.
    * Y-height alone is not enough there, it must be split down the middle as well.
-   * It might be the case that the split logic should be applied everywhere ...
    */
   private void combineImageTextsThatShouldBeGrouped(List<ImageText> imageTexts) {
 
@@ -199,11 +196,7 @@ public class ServiceImageOcr {
 
         var nextImageText = iterator.next();
 
-        if (imageTextsOnSameLine(currentImageText, nextImageText) && (
-          currentImageText.getY() < Y_HEIGHT_START_FOR_EXERCISE_BLOCK
-            || currentImageText.getY() > Y_HEIGHT_END_FOR_EXERCISE_BLOCK
-            || Math.round(currentImageText.getX()) == Math.round(nextImageText.getX()) // Same half of image
-        )) {
+        if (imageTextsCanBeCombined(currentImageText, nextImageText)) {
           var combinedValue = STR."\{currentImageText.getValue()} \{nextImageText.getValue()}";
           currentImageText.setValue(combinedValue);
           iterator.remove();
@@ -215,10 +208,17 @@ public class ServiceImageOcr {
   }
 
   /**
-   * Comparing two image text y-values to see if they are close enough to be on the same line.
+   * Comparing two image text y-values to see if they are close enough to be on the same line and half of image.
    */
   private boolean imageTextsOnSameLine(ImageText a, ImageText b) {
     return Precision.equals(a.getY(), b.getY(), Y_HEIGHT_DIFFERENCE_CONSIDERED_FOR_SAME_LINE);
+  }
+
+  /**
+   * Comparing two image text y-values to see if they are close enough to be on the same line and half of image.
+   */
+  private boolean imageTextsCanBeCombined(ImageText a, ImageText b) {
+    return imageTextsOnSameLine(a, b) && Math.round(a.getX()) == Math.round(b.getX());
   }
 
 }
