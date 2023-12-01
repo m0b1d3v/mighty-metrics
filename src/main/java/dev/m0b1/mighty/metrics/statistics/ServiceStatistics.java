@@ -100,7 +100,7 @@ public class ServiceStatistics {
     }
 
     if (result > 0) {
-      add(statistics, result, "group workout gold stars");
+      add(statistics, result, "workouts meeting or beating group average");
     }
   }
 
