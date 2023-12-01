@@ -127,7 +127,7 @@ public abstract class ServiceImageTextParserBase {
 
   protected void groupAverage(DbScoreCard dbScoreCard, List<ImageText> imageTexts, int index) {
     var result = findScoreByRegex(STR."^\{PATTERN_SCORE}", imageTexts, index);
-    dbScoreCard.setIdScorePersonal(result);
+    dbScoreCard.setIdScoreGroup(result);
   }
 
   protected void personalAverage(DbScoreCard dbScoreCard, List<ImageText> imageTexts, int index) {
