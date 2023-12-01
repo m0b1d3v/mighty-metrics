@@ -1,6 +1,7 @@
 package dev.m0b1.mighty.metrics.auth;
 
 import dev.m0b1.mighty.metrics.UnitTestBase;
+import dev.m0b1.mighty.metrics.route.RouteAdvice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,10 +15,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class AuthControllerAdviceUnitTest extends UnitTestBase {
+class RouteAdviceUnitTest extends UnitTestBase {
 
   @InjectMocks
-  private AuthControllerAdvice advice;
+  private RouteAdvice advice;
 
   @Mock
   private Model model;
