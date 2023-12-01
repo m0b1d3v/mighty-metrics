@@ -16,7 +16,7 @@ plugins {
 }
 
 group = 'dev.m0b1'
-version = 'development'
+version = '1.0b'
 
 java {
 	toolchain {
