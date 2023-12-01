@@ -4,6 +4,7 @@ import dev.m0b1.mighty.metrics.logging.LogData;
 import dev.m0b1.mighty.metrics.logging.ServiceLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.event.Level;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.PostConstruct;
 
-import java.io.File;
-import java.nio.file.Files;
+import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -104,17 +104,11 @@ public class DbMigration implements SmartInitializingSingleton {
   }
 
   private String readMigrationFile(String migrationFilePath) throws Exception {
-
       var classLoader = DbMigration.class.getClassLoader();
-      var resource = classLoader.getResource("migrations/" + migrationFilePath + ".sql");
-
-      assert resource != null;
-
-      var uri = resource.toURI();
-      var file = new File(uri);
-      var path = file.toPath();
-
-      return Files.readString(path);
+      try (var resource = classLoader.getResourceAsStream("migrations/" + migrationFilePath + ".sql")) {
+          assert resource != null;
+          return IOUtils.toString(resource, Charset.defaultCharset());
+      }
   }
 
   private List<String> buildMigrationsOrder() {
