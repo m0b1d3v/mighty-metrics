@@ -54,6 +54,9 @@ dependencies {
 		exclude group: 'commons-logging', module: 'commons-logging'
 	}
 
+	// Java 8 Date/Time serializing
+	implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0')
+
 	// Apache commons
 	implementation('org.apache.commons:commons-collections4:4.4')
 	implementation('org.apache.commons:commons-lang3:3.14.0')

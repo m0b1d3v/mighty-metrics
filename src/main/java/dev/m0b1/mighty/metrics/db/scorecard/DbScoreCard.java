@@ -74,8 +74,10 @@ public class DbScoreCard {
 
   private String imageTitle;
 
+  @JsonIgnore
   private byte[] imageBytes;
 
+  @JsonIgnore
   private Double version;
 
 }

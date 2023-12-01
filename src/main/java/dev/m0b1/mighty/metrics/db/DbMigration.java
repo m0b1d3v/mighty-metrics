@@ -1,8 +1,9 @@
 package dev.m0b1.mighty.metrics.db;
 
-import dev.m0b1.mighty.metrics.util.LogUtil;
+import dev.m0b1.mighty.metrics.util.ServiceLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handles database migrations by running the necessary SQL statements in a specific order.
@@ -27,6 +29,7 @@ import java.util.List;
 public class DbMigration implements SmartInitializingSingleton {
 
   private final JdbcTemplate jdbcTemplate;
+  private final ServiceLog serviceLog;
 
   /**
    * Enable Write-Ahead Logging before the transactional migrations run below.
@@ -60,12 +63,7 @@ public class DbMigration implements SmartInitializingSingleton {
         try {
           runMigration(migrationFilePath);
         } catch (Exception e) {
-          log.atError()
-            .setMessage("Could not run migration file")
-            .setCause(e)
-            .addMarker(LogUtil.kv("path", migrationFilePath))
-            .log();
-
+          serviceLog.run(Level.ERROR, "Could not run migration file", e, Map.of("path", migrationFilePath));
           throw new RuntimeException(e);
         }
 
@@ -86,12 +84,7 @@ public class DbMigration implements SmartInitializingSingleton {
   }
 
   private void runMigration(String migrationFilePath) throws Exception {
-
-    log.atInfo()
-      .setMessage("Running migration")
-      .addMarker(LogUtil.kv("path", migrationFilePath))
-      .log();
-
+    serviceLog.run(Level.INFO, "Running migration", Map.of("path", migrationFilePath));
     var sql = readMigrationFile(migrationFilePath);
     jdbcTemplate.execute(sql);
   }

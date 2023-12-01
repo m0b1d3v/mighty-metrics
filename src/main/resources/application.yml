@@ -1,3 +1,8 @@
+application:
+  webhook:
+    avatar: # Intentionally left empty for development
+    destination: # Intentionally left empty for development
+
 sentry:
   dsn: # Intentionally left empty for development
 

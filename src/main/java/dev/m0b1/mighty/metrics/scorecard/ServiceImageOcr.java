@@ -7,10 +7,13 @@ import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
+import dev.m0b1.mighty.metrics.util.ServiceLog;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Precision;
+import org.slf4j.event.Level;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -25,11 +28,14 @@ import java.util.List;
  *
  * Version specific logic should go later down the service chain, for example the parser.
  */
+@RequiredArgsConstructor
 @Slf4j
 @Service
 public class ServiceImageOcr {
 
   private static final double Y_HEIGHT_DIFFERENCE_CONSIDERED_FOR_SAME_LINE = 0.005;
+
+  private final ServiceLog serviceLog;
 
   /**
    * Read a processed image into a sorted map of strings with relevant top-left origin points first.
@@ -73,10 +79,7 @@ public class ServiceImageOcr {
       result = responses.get(0);
 
     } catch (IOException e) {
-      log.atError()
-        .setMessage("Could not fetch Google image annotations")
-        .setCause(e)
-        .log();
+      serviceLog.run(Level.ERROR, "Could not fetch Google image annotations", e, null);
     }
 
     return result;

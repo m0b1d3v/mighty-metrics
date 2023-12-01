@@ -1,11 +1,13 @@
 package dev.m0b1.mighty.metrics.scorecard;
 
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
+import dev.m0b1.mighty.metrics.util.ServiceLog;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.imaging.ImageFormats;
 import org.apache.commons.imaging.Imaging;
+import org.slf4j.event.Level;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +24,7 @@ public class ServiceScorecardProcessor {
 
   private static final int SCALED_WIDTH = 720;
 
+  private final ServiceLog serviceLog;
   private final ServiceImageOcr serviceImageOcr;
   private final ServiceImageParser serviceImageParser;
 
@@ -44,10 +47,7 @@ public class ServiceScorecardProcessor {
       serviceImageParser.run(dbScoreCard, imageTexts);
 
     } catch (Exception e) {
-      log.atError()
-        .setMessage("Could not read uploaded file")
-        .setCause(e)
-        .log();
+      serviceLog.run(Level.ERROR, "Could not read uploaded file", e, null);
     }
   }
 

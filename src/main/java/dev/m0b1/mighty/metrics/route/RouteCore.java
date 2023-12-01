@@ -8,9 +8,11 @@ import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardRepository;
 import dev.m0b1.mighty.metrics.scorecard.ServiceScorecardProcessor;
+import dev.m0b1.mighty.metrics.util.ServiceLog;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.event.Level;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -41,6 +44,7 @@ public class RouteCore {
   private final DbMemberRepository dbMemberRepository;
   private final DbScoreCardRepository dbScoreCardRepository;
   private final DbScoreRepository dbScoreRepository;
+  private final ServiceLog serviceLog;
   private final ServiceScorecardProcessor serviceScorecardProcessor;
 
   @GetMapping(PATH)
@@ -87,10 +91,13 @@ public class RouteCore {
     HttpServletRequest httpServletRequest
   ) {
 
+    var shouldLogScorecard = false;
+
     throwIfDeniedScorecard(dbScoreCard, user);
 
     if (shouldReadScorecardImage(httpServletRequest, multipartFile)) {
       serviceScorecardProcessor.run(dbScoreCard, multipartFile);
+      shouldLogScorecard = true;
     }
 
     removeExerciseByIndexIfGiven(dbScoreCard, httpServletRequest);
@@ -103,6 +110,10 @@ public class RouteCore {
     if (bindingResult.hasErrors()) {
       addModelAttributes(dbScoreCard, model);
     } else if (shouldDeleteScorecard(httpServletRequest)) {
+
+      logWarning("User deleted scorecard", dbScoreCard.getUuid(), user);
+      shouldLogScorecard = true;
+
       dbScoreCardRepository.delete(dbScoreCard);
       result = STR."redirect:\{PATH}";
     } else {
@@ -111,11 +122,16 @@ public class RouteCore {
       result = STR."redirect:\{PATH}/\{redirectId}";
     }
 
+    if (shouldLogScorecard) {
+      serviceLog.run(Level.INFO, "Scorecard", Map.of("data", dbScoreCard));
+    }
+
     return result;
   }
 
   private void throwIfDeniedScorecard(UUID uuid, OAuth2User user) {
     if (dbMemberRepository.deniedScorecard(user, uuid)) {
+      logWarning("User denied access to scorecard", uuid, user);
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scorecard not found.");
     }
   }
@@ -123,8 +139,16 @@ public class RouteCore {
   private void throwIfDeniedScorecard(DbScoreCard dbScoreCard, OAuth2User user) {
     var uuid = dbScoreCard.getUuid();
     if (uuid != null && dbMemberRepository.deniedScorecard(user, uuid)) {
+      logWarning("User denied access to scorecard", uuid, user);
       throw new AccessDeniedException("Access denied.");
     }
+  }
+
+  private void logWarning(String message, UUID scorecardUuid, OAuth2User user) {
+    serviceLog.run(Level.WARN, message, Map.of(
+      "scorecard", scorecardUuid,
+      "user", user.getName()
+    ));
   }
 
   private boolean shouldReadScorecardImage(HttpServletRequest httpServletRequest, MultipartFile file) {

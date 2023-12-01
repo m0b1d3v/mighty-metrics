@@ -1,7 +1,7 @@
 package dev.m0b1.mighty.metrics.db.scorecard;
 
 import dev.m0b1.mighty.metrics.db.DbUtil;
-import dev.m0b1.mighty.metrics.util.JsonUtil;
+import dev.m0b1.mighty.metrics.util.ServiceJson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,9 +18,9 @@ import static java.lang.StringTemplate.STR;
 @Slf4j
 public class DbScoreCardRepository {
 
-  private static final DbScoreCardMapper MAPPER = new DbScoreCardMapper();
-
+  private final DbScoreCardMapper dbScoreCardMapper;
   private final JdbcTemplate jdbcTemplate;
+  private final ServiceJson serviceJson;
 
   public List<DbScoreCard> readAll(Long idMember) {
 
@@ -41,7 +41,7 @@ public class DbScoreCardRepository {
       ORDER BY \{DbScoreCard.COLUMN_DATE} DESC, \{DbScoreCard.COLUMN_TIME} DESC, \{DbScoreCard.COLUMN_ID} DESC
       """;
 
-    return jdbcTemplate.query(sql, MAPPER, idMember);
+    return jdbcTemplate.query(sql, dbScoreCardMapper, idMember);
   }
 
   public DbScoreCard readData(UUID uuid) {
@@ -63,7 +63,7 @@ public class DbScoreCardRepository {
         AND \{DbScoreCard.COLUMN_DELETED} IS NOT TRUE
       """;
 
-    return jdbcTemplate.queryForObject(sql, MAPPER, uuid);
+    return jdbcTemplate.queryForObject(sql, dbScoreCardMapper, uuid);
   }
 
   public DbScoreCard readImage(UUID uuid) {
@@ -76,7 +76,7 @@ public class DbScoreCardRepository {
         AND \{DbScoreCard.COLUMN_DELETED} IS NOT TRUE
       """;
 
-    return jdbcTemplate.queryForObject(sql, MAPPER, uuid);
+    return jdbcTemplate.queryForObject(sql, dbScoreCardMapper, uuid);
   }
 
   public DbScoreCard upsert(DbScoreCard dbScoreCard) {
@@ -85,7 +85,7 @@ public class DbScoreCardRepository {
       dbScoreCard.setUuid(UUID.randomUUID());
     }
 
-    var exercisesJson = JsonUtil.write(dbScoreCard.getExercises(), "[]");
+    var exercisesJson = serviceJson.write(dbScoreCard.getExercises(), "[]");
 
     var inputMap = new LinkedHashMap<String, Object>();
     inputMap.put(DbScoreCard.COLUMN_ID_MEMBER, dbScoreCard.getIdMember());
