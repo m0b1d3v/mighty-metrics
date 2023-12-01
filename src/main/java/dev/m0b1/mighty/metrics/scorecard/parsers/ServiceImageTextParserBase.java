@@ -26,11 +26,13 @@ public abstract class ServiceImageTextParserBase {
   private static final String PATTERN_SCORE = "([A-Z]\\s?\\+?)";
 
   protected void removeUselessText(List<ImageText> imageTexts) {
-    imageTexts.removeIf(imageText -> StringUtils.endsWithAny(
+    imageTexts.removeIf(imageText -> StringUtils.startsWithAny(
       imageText.getValue(),
-      "Stretching",
-      "Tracking",
-      "Workout"
+      "Generalised",
+      "Upper Body",
+      "Cardio",
+      "Core",
+      "Lower Body"
     ));
   }
 
