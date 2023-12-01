@@ -28,11 +28,12 @@ public abstract class ServiceImageTextParserBase {
   protected void removeUselessText(List<ImageText> imageTexts) {
     imageTexts.removeIf(imageText -> StringUtils.startsWithAny(
       imageText.getValue(),
-      "Generalised",
-      "Upper Body",
       "Cardio",
       "Core",
-      "Lower Body"
+      "Generalised",
+      "Lower Body",
+      "Stretching",
+      "Upper Body"
     ));
   }
 
