@@ -38,3 +38,7 @@ testIntegrations:
 
 testUnits:
 	./gradlew test --tests '*UnitTest'
+
+transfer:
+	scp build/distributions/*.zip ~/.config/gcloud/application_default_credentials.json projects:/srv/mighty-metrics/private/
+	ssh projects 'cd /srv/mighty-metrics/private && unzip *.zip && rm *.zip'
