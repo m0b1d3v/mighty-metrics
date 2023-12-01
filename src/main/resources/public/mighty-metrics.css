@@ -102,6 +102,7 @@ Images
 */
 
 header img {
+	margin-bottom: var(--spacing);
 	max-width: 50%;
 }
 
