@@ -1,7 +1,8 @@
 package dev.m0b1.mighty.metrics.auth;
 
 import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
-import dev.m0b1.mighty.metrics.util.ServiceLog;
+import dev.m0b1.mighty.metrics.logging.LogData;
+import dev.m0b1.mighty.metrics.logging.ServiceLog;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.event.Level;
@@ -31,7 +32,11 @@ public class AuthSuccessListener implements ApplicationListener<AuthenticationSu
 
       var oAuth2User = token.getPrincipal();
 
-      serviceLog.run(Level.INFO, "Login", Map.of("user", oAuth2User.getName()));
+      serviceLog.run(LogData.builder()
+        .level(Level.INFO)
+        .message("Login")
+        .markers(Map.of("user", oAuth2User.getName()))
+      );
 
       dbMemberRepository.upsert(oAuth2User);
     }

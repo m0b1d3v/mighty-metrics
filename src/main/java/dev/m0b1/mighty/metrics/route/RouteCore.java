@@ -7,8 +7,9 @@ import dev.m0b1.mighty.metrics.db.member.DbMemberRepository;
 import dev.m0b1.mighty.metrics.db.score.DbScoreRepository;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCardRepository;
+import dev.m0b1.mighty.metrics.logging.LogData;
 import dev.m0b1.mighty.metrics.scorecard.ServiceScorecardProcessor;
-import dev.m0b1.mighty.metrics.util.ServiceLog;
+import dev.m0b1.mighty.metrics.logging.ServiceLog;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -123,7 +124,11 @@ public class RouteCore {
     }
 
     if (shouldLogScorecard) {
-      serviceLog.run(Level.INFO, "Scorecard", Map.of("data", dbScoreCard));
+      serviceLog.run(LogData.builder()
+        .level(Level.INFO)
+        .message("Scorecard")
+        .markers(Map.of("data", dbScoreCard))
+      );
     }
 
     return result;
@@ -145,10 +150,14 @@ public class RouteCore {
   }
 
   private void logWarning(String message, UUID scorecardUuid, OAuth2User user) {
-    serviceLog.run(Level.WARN, message, Map.of(
-      "scorecard", scorecardUuid,
-      "user", user.getName()
-    ));
+    serviceLog.run(LogData.builder()
+      .level(Level.WARN)
+      .message(message)
+      .markers(Map.of(
+        "scorecard", scorecardUuid,
+        "user", user.getName()
+      ))
+    );
   }
 
   private boolean shouldReadScorecardImage(HttpServletRequest httpServletRequest, MultipartFile file) {

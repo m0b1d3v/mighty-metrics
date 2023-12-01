@@ -1,6 +1,7 @@
 package dev.m0b1.mighty.metrics.db;
 
-import dev.m0b1.mighty.metrics.util.ServiceLog;
+import dev.m0b1.mighty.metrics.logging.LogData;
+import dev.m0b1.mighty.metrics.logging.ServiceLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;
@@ -63,7 +64,14 @@ public class DbMigration implements SmartInitializingSingleton {
         try {
           runMigration(migrationFilePath);
         } catch (Exception e) {
-          serviceLog.run(Level.ERROR, "Could not run migration file", e, Map.of("path", migrationFilePath));
+
+          serviceLog.run(LogData.builder()
+            .level(Level.ERROR)
+            .message("Could not run migration file")
+            .throwable(e)
+            .markers(Map.of("path", migrationFilePath))
+          );
+
           throw new RuntimeException(e);
         }
 
@@ -84,7 +92,13 @@ public class DbMigration implements SmartInitializingSingleton {
   }
 
   private void runMigration(String migrationFilePath) throws Exception {
-    serviceLog.run(Level.INFO, "Running migration", Map.of("path", migrationFilePath));
+
+    serviceLog.run(LogData.builder()
+      .level(Level.INFO)
+      .message("Running migration")
+      .markers(Map.of("path", migrationFilePath))
+    );
+
     var sql = readMigrationFile(migrationFilePath);
     jdbcTemplate.execute(sql);
   }

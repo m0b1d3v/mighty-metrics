@@ -7,7 +7,8 @@ import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
-import dev.m0b1.mighty.metrics.util.ServiceLog;
+import dev.m0b1.mighty.metrics.logging.LogData;
+import dev.m0b1.mighty.metrics.logging.ServiceLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RegExUtils;
@@ -79,7 +80,11 @@ public class ServiceImageOcr {
       result = responses.get(0);
 
     } catch (IOException e) {
-      serviceLog.run(Level.ERROR, "Could not fetch Google image annotations", e, null);
+      serviceLog.run(LogData.builder()
+        .level(Level.ERROR)
+        .message("Could not fetch Google image annotations")
+        .throwable(e)
+      );
     }
 
     return result;

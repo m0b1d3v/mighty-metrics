@@ -1,7 +1,8 @@
 package dev.m0b1.mighty.metrics.scorecard;
 
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
-import dev.m0b1.mighty.metrics.util.ServiceLog;
+import dev.m0b1.mighty.metrics.logging.LogData;
+import dev.m0b1.mighty.metrics.logging.ServiceLog;
 import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,11 @@ public class ServiceScorecardProcessor {
       serviceImageParser.run(dbScoreCard, imageTexts);
 
     } catch (Exception e) {
-      serviceLog.run(Level.ERROR, "Could not read uploaded file", e, null);
+      serviceLog.run(LogData.builder()
+        .level(Level.ERROR)
+        .message("Could not read uploaded file")
+        .throwable(e)
+      );
     }
   }
 
