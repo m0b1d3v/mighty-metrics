@@ -79,7 +79,7 @@ public class DbScoreCardRepository {
     return jdbcTemplate.queryForObject(sql, dbScoreCardMapper, uuid);
   }
 
-  public DbScoreCard upsert(DbScoreCard dbScoreCard) {
+  public DbScoreCard upsert(DbScoreCard dbScoreCard, boolean imageDataAdded) {
 
     if (dbScoreCard.getUuid() == null) {
       dbScoreCard.setUuid(UUID.randomUUID());
@@ -98,8 +98,11 @@ public class DbScoreCardRepository {
     inputMap.put(DbScoreCard.COLUMN_WORKOUT_INTENSITY, dbScoreCard.getWorkoutIntensity());
     inputMap.put(DbScoreCard.COLUMN_MIGHTERIUM_COLLECTED, dbScoreCard.getMighteriumCollected());
     inputMap.put(DbScoreCard.COLUMN_EXERCISES, exercisesJson);
-    inputMap.put(DbScoreCard.COLUMN_IMAGE_TITLE, dbScoreCard.getImageTitle());
-    inputMap.put(DbScoreCard.COLUMN_IMAGE_BYTES, dbScoreCard.getImageBytes());
+
+    if (imageDataAdded) {
+      inputMap.put(DbScoreCard.COLUMN_IMAGE_TITLE, dbScoreCard.getImageTitle());
+      inputMap.put(DbScoreCard.COLUMN_IMAGE_BYTES, dbScoreCard.getImageBytes());
+    }
 
     DbUtil.upsert(
       jdbcTemplate,

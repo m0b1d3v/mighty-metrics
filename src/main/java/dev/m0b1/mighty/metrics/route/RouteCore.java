@@ -96,7 +96,8 @@ public class RouteCore {
 
     throwIfDeniedScorecard(dbScoreCard, user);
 
-    if (shouldReadScorecardImage(httpServletRequest, multipartFile)) {
+    var imageDataAdded = shouldReadScorecardImage(httpServletRequest, multipartFile);
+    if (imageDataAdded) {
       serviceScorecardProcessor.run(dbScoreCard, multipartFile);
       shouldLogScorecard = true;
     }
@@ -118,7 +119,7 @@ public class RouteCore {
       dbScoreCardRepository.delete(dbScoreCard);
       result = STR."redirect:/";
     } else {
-      dbScoreCard = dbScoreCardRepository.upsert(dbScoreCard);
+      dbScoreCard = dbScoreCardRepository.upsert(dbScoreCard, imageDataAdded);
       var redirectId = dbScoreCard.getUuid();
       result = STR."redirect:\{PATH}/\{redirectId}";
     }
