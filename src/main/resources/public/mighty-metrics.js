@@ -4,7 +4,7 @@ document.querySelectorAll("input[type='submit']").forEach(button => {
 });
 
 // All delete buttons should ask the user to confirm
-document.querySelectorAll("input[name='delete']").forEach(button => {
+document.querySelectorAll("button[name='delete']").forEach(button => {
 	button.onclick = () => {
 		return confirm("Are you sure? This cannot be undone.");
 	}
