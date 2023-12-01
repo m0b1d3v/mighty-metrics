@@ -2,11 +2,9 @@ package dev.m0b1.mighty.metrics.db.scorecard;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.m0b1.mighty.metrics.db.DbUtil;
-import dev.m0b1.mighty.metrics.util.ServiceJson;
+import dev.m0b1.mighty.metrics.json.JsonUtil;
 import jakarta.annotation.Nonnull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,11 +13,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
-@RequiredArgsConstructor
-@Service
 public class DbScoreCardMapper implements RowMapper<DbScoreCard> {
-
-  private final ServiceJson serviceJson;
 
   @Override
   public DbScoreCard mapRow(@Nonnull ResultSet resultSet, int rowNumber) throws SQLException {
@@ -51,7 +45,7 @@ public class DbScoreCardMapper implements RowMapper<DbScoreCard> {
 
     var exercisesJson = DbUtil.safeMap(resultSet, columns, DbScoreCard.COLUMN_EXERCISES, String.class);
     var typeReference = new TypeReference<List<DbScoreCardExercise>>(){};
-    var exercises = serviceJson.read(exercisesJson, typeReference);
+    var exercises = JsonUtil.read(exercisesJson, typeReference);
     if (exercises != null) {
       scoreCard.getExercises().addAll(exercises);
     }

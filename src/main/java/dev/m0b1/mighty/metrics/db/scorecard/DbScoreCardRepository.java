@@ -1,7 +1,7 @@
 package dev.m0b1.mighty.metrics.db.scorecard;
 
 import dev.m0b1.mighty.metrics.db.DbUtil;
-import dev.m0b1.mighty.metrics.util.ServiceJson;
+import dev.m0b1.mighty.metrics.json.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,9 +18,9 @@ import static java.lang.StringTemplate.STR;
 @Slf4j
 public class DbScoreCardRepository {
 
-  private final DbScoreCardMapper dbScoreCardMapper;
+  private static final DbScoreCardMapper dbScoreCardMapper = new DbScoreCardMapper();
+
   private final JdbcTemplate jdbcTemplate;
-  private final ServiceJson serviceJson;
 
   public List<DbScoreCard> readAll(Long idMember) {
 
@@ -85,7 +85,7 @@ public class DbScoreCardRepository {
       dbScoreCard.setUuid(UUID.randomUUID());
     }
 
-    var exercisesJson = serviceJson.write(dbScoreCard.getExercises(), "[]");
+    var exercisesJson = JsonUtil.write(dbScoreCard.getExercises(), "[]");
 
     var inputMap = new LinkedHashMap<String, Object>();
     inputMap.put(DbScoreCard.COLUMN_ID_MEMBER, dbScoreCard.getIdMember());
