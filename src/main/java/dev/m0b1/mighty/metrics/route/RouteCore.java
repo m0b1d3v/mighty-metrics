@@ -115,7 +115,7 @@ public class RouteCore {
       shouldLogScorecard = true;
 
       dbScoreCardRepository.delete(dbScoreCard);
-      result = STR."redirect:\{PATH}";
+      result = STR."redirect:/";
     } else {
       dbScoreCard = dbScoreCardRepository.upsert(dbScoreCard);
       var redirectId = dbScoreCard.getUuid();
