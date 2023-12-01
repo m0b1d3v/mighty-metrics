@@ -19,22 +19,6 @@
 				Score tracking for <a href="https://themightygym.com">The Mighty Gym</a>
 			</h2>
 
-			<form method="post" th:action="@{/logout}" th:if="${loggedIn}">
-				<button type="submit" class="contrast outline">
-
-					<img
-						alt="Discord avatar"
-						class="avatar margin-right"
-						th:src="${avatarImageUrl}"
-						height="64px"
-						width="64px"
-					/>
-
-					Log Out
-
-				</button>
-			</form>
-
 			<hr/>
 
 		</header>

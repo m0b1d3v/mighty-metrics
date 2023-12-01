@@ -3,8 +3,25 @@
 
 	<body>
 		<footer th:fragment="footer">
+
 			<hr/>
-			<h4>Development build</h4>
+
+			<form method="post" th:action="@{/logout}" th:if="${loggedIn}">
+				<button type="submit" class="contrast outline width-auto">
+
+					<img
+						alt="Discord avatar"
+						class="avatar margin-right"
+						th:src="${avatarImageUrl}"
+						height="64px"
+						width="64px"
+					/>
+
+					Log Out
+
+				</button>
+			</form>
+
 		</footer>
 	</body>
 

@@ -118,3 +118,8 @@ Positioning
 .text-align-center {
 	text-align: center;
 }
+
+.width-auto {
+	display: inline-block;
+	width: auto;
+}
