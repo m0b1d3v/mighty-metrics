@@ -2,14 +2,11 @@ package dev.m0b1.mighty.metrics.scorecard.parsers;
 
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
 import dev.m0b1.mighty.metrics.scorecard.ImageText;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
 public class ServiceImageTextParser2_0 extends ServiceImageTextParserBase {
 
@@ -17,23 +14,28 @@ public class ServiceImageTextParser2_0 extends ServiceImageTextParserBase {
 
     removeUselessText(imageTexts);
 
-    var indexDate = 2; // Pray this is consistent
     var indexCoach = indexOfKeywords(imageTexts, "WORKOUT TEAM - ");
-    var indexMighterium = indexOfKeywords(imageTexts, "MIGHTERIUM COLLECTED"); // Not always present
-    var indexExerciseStart = indexOfKeywords(imageTexts, "GROUP AVERAGE") + 2;
-    var indexExerciseEnd = ListUtils.indexOf(imageTexts, t -> t.getY() > 0.66) - 1;
+    coach(dbScoreCard, imageTexts, indexCoach);
 
-    var coach = imageTextAtIndex(imageTexts, indexCoach);
-    var groupAverage = imageTextAtIndex(imageTexts, indexDate + 1);
-    var personalAverage = imageTextAtIndex(imageTexts, indexDate + 1);
-    var workoutIntensity = imageTextAtIndex(imageTexts, indexDate + 2);
-    // TODO: Will have to weld together dateIndex-1 and dateIndex
-    var localDate = imageTextAtIndex(imageTexts, indexDate);
-    var localTime = imageTextAtIndex(imageTexts, indexDate);
-    var mighterium = imageTextAtIndex(imageTexts, indexMighterium - 2);
-    var exercises = exercises(imageTexts, indexExerciseStart, indexExerciseEnd);
+    var indexAverages = 3;
+    groupAverage(dbScoreCard, imageTexts, indexAverages);
+    personalAverage(dbScoreCard, imageTexts, indexAverages);
 
-    var breakpoint = 1;
+    var indexWorkoutIntensity = 4;
+    workoutIntensity(dbScoreCard, imageTexts, indexWorkoutIntensity);
+
+    var indexDate = 2;
+    localDate(dbScoreCard, imageTexts, indexDate);
+
+    var indexTime = 2;
+    localTime(dbScoreCard, imageTexts, indexTime);
+
+    int indexExerciseStart = indexOfKeywords(imageTexts, "GROUP AVERAGE") + 2;
+    int indexExerciseEnd = ListUtils.indexOf(imageTexts, t -> t.getY() > 0.66) - 1;
+    exercises(dbScoreCard, imageTexts, indexExerciseStart, indexExerciseEnd);
+
+    var indexMighterium = indexOfKeywords(imageTexts, "MIGHTERIUM COLLECTED") - 2;
+    mighterium(dbScoreCard, imageTexts, indexMighterium);
   }
 
 }

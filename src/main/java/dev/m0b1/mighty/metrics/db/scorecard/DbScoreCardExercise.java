@@ -12,7 +12,7 @@ public class DbScoreCardExercise {
   @Max(value = 6, message = "Invalid score detected")
   private Integer idScore;
 
-  @Size(max = 10, message = "Exercise name cannot be longer than {max}")
+  @Size(max = 32, message = "Exercise name cannot be longer than {max}")
   private String exercise;
 
 }

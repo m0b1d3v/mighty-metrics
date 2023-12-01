@@ -1,7 +1,7 @@
 package dev.m0b1.mighty.metrics.scorecard;
 
 import dev.m0b1.mighty.metrics.db.scorecard.DbScoreCard;
-import dev.m0b1.mighty.metrics.scorecard.parsers.ServiceImageTextParser1_x;
+import dev.m0b1.mighty.metrics.scorecard.parsers.ServiceImageTextParser1;
 import dev.m0b1.mighty.metrics.scorecard.parsers.ServiceImageTextParser2_0;
 import dev.m0b1.mighty.metrics.scorecard.parsers.ServiceImageTextParser2_1;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,6 @@ import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.math3.util.Precision;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 @Service
 public class ServiceImageParser {
 
-  private final ServiceImageTextParser1_x serviceImageTextParser1_x;
+  private final ServiceImageTextParser1 serviceImageTextParser1;
   private final ServiceImageTextParser2_0 serviceImageTextParser2_0;
   private final ServiceImageTextParser2_1 serviceImageTextParser2_1;
 
@@ -31,8 +30,8 @@ public class ServiceImageParser {
 
     if (dbScoreCard.getVersion() != null) {
       if (dbScoreCard.getVersion() < 2) {
-        serviceImageTextParser1_x.run(dbScoreCard, imageTexts);
-      } else if (Precision.equals(dbScoreCard.getVersion(), 2)) {
+        serviceImageTextParser1.run(dbScoreCard, imageTexts);
+      } else if (dbScoreCard.getVersion() == 2.0) {
         serviceImageTextParser2_0.run(dbScoreCard, imageTexts);
       } else {
         serviceImageTextParser2_1.run(dbScoreCard, imageTexts);
