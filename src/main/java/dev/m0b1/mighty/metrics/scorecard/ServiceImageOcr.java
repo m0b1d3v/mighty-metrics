@@ -34,7 +34,7 @@ import java.util.List;
 @Service
 public class ServiceImageOcr {
 
-  private static final double Y_HEIGHT_DIFFERENCE_CONSIDERED_FOR_SAME_LINE = 0.005;
+  private static final double Y_HEIGHT_DIFFERENCE_CONSIDERED_FOR_SAME_LINE = 0.0055;
 
   private final ServiceLog serviceLog;
 
